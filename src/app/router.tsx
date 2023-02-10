@@ -1,0 +1,134 @@
+import { RouteObject } from 'react-router'
+import AuthGuard from '../auth/AuthGuard'
+import { Login } from 'modules/auth/Login'
+import { Register } from 'modules/auth/Register'
+import {
+  Admin,
+  Roles,
+  CreateRole,
+  UpdateRole,
+  DetailRole,
+  Users,
+  CreateUser,
+  UpdateUser,
+  DetailUser,
+} from 'modules/admin'
+import { Home } from 'modules/home'
+import Config from 'modules/config/Config'
+import NotFound from 'components/shared/NotFound'
+import { UserProfile } from 'modules/auth/UserProfile'
+import { UserChangePassword } from 'modules/auth/UserChangePassword'
+import { HintButton } from 'components/shared/HintButton'
+
+const routes: RouteObject[] = [
+  {
+    path: '/',
+    element: <Home />,
+  },
+  {
+    path: '/home',
+    element: <Home />,
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/register',
+    element: <Register />,
+  },
+  {
+    path: '/user/:id',
+    element: <UserProfile />,
+  },
+  {
+    path: '/change-password/:id',
+    element: <UserChangePassword />,
+  },
+  {
+    path: '/admin',
+    element: (
+      <AuthGuard role={{ route: 'menu', action: 'admin' }}>
+        <Admin />
+      </AuthGuard>
+    ),
+    children: [
+      {
+        path: 'user',
+        element: (
+          <AuthGuard role={{ route: 'user', action: 'list' }}>
+            <Users />
+            <HintButton playlistId='PLHX_VLeC9D-7V5WOxVhHQ6xDFSqHNh2OC' />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: 'user/create',
+        element: (
+          <AuthGuard role={{ route: 'user', action: 'create' }}>
+            <CreateUser />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: 'user/update/:id',
+        element: (
+          <AuthGuard role={{ route: 'user', action: 'update' }}>
+            <UpdateUser />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: 'user/detail/:id',
+        element: (
+          <AuthGuard role={{ route: 'user', action: 'detail' }}>
+            <DetailUser />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: 'role',
+        element: (
+          <AuthGuard role={{ route: 'role', action: 'list' }}>
+            <Roles />
+            <HintButton playlistId='PLHX_VLeC9D-7V5WOxVhHQ6xDFSqHNh2OC' />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: 'role/create',
+        element: (
+          <AuthGuard role={{ route: 'role', action: 'create' }}>
+            <CreateRole />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: 'role/update/:id',
+        element: (
+          <AuthGuard role={{ route: 'role', action: 'update' }}>
+            <UpdateRole />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: 'role/detail/:id',
+        element: (
+          <AuthGuard role={{ route: 'role', action: 'detail' }}>
+            <DetailRole />
+          </AuthGuard>
+        ),
+      },
+    ],
+  },
+  {
+    path: '/config',
+    element: <Config />,
+  },
+  {
+    path: '*',
+    element: <NotFound />,
+  },
+]
+
+export default routes
