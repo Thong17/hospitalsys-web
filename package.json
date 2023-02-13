@@ -1,5 +1,5 @@
 {
-  "name": "softdev-web",
+  "name": "hospital-web",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -62,8 +62,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "serve -s build",
-    "dockerBuild": "docker build -t thonggee/softdev-web .",
-    "dockerPush": "docker push thonggee/softdev-web"
+    "dockerBuild": "docker build -t thonggee/hospitalsys-web .",
+    "dockerPush": "docker push thonggee/hospitalsys-web"
   },
   "eslintConfig": {
     "extends": "react-app"

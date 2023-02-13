@@ -135,8 +135,8 @@ export const languages = {
     SELL: 'Sell',
     BUY: 'Buy',
     // Homepage
-    HOMEPAGE_TITLE: 'Welcome to SoftDev Management System',
-    HOMEPAGE_DESCRIPTION: 'We develop and design a reliable and high performance web application for your business base on your requirement.',
+    HOMEPAGE_TITLE: 'Welcome to Hospital Management System',
+    HOMEPAGE_DESCRIPTION: 'We develop this system for managing hospital process.',
     // Form
     LOGIN: 'Login',
     REGISTER: 'Register',
@@ -351,7 +351,7 @@ export const languages = {
     SELL: 'លក់',
     BUY: 'ទិញ',
     // Homepage
-    HOMEPAGE_TITLE: 'សូមស្វាគមន៍មកកាន់ប្រព័ន្ធគ្រប់គ្រង SoftDev',
+    HOMEPAGE_TITLE: 'សូមស្វាគមន៍មកកាន់ប្រព័ន្ធគ្រប់គ្រង Hospital',
     HOMEPAGE_DESCRIPTION: 'យើងបង្កើត និងរចនាកម្មវិធីគេហទំព័រដែលអាចទុកចិត្តបាន និងដំណើរការខ្ពស់សម្រាប់អាជីវកម្មរបស់អ្នក ជាមួយនឹងមូលដ្ឋានចំណុចប្រទាក់អ្នកប្រើទំនើបតាមតម្រូវការរបស់អ្នក។',
     // Form
     LOGIN: 'ចូល',
