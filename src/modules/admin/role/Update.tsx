@@ -21,7 +21,7 @@ export const UpdateRole = () => {
   
   useEffect(() => {
     if (id) {
-      dispatch(getRole({ id, query: {}, fields: ['name', 'privilege', 'description'] }))
+      dispatch(getRole({ id, query: {}, fields: ['name', 'privilege', 'description', 'navigation'] }))
     }
   }, [dispatch, id])
 

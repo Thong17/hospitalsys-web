@@ -41,6 +41,10 @@ export const RoleForm = ({ defaultValues, id }: any) => {
     setValue('privilege', privilege)
   }
 
+  const handleSetNavigation = (navigation) => {
+    setValue('navigation', navigation)
+  }
+
   const handleChangeRole = (role) => {
     setValue('name', role)
   }
@@ -160,8 +164,9 @@ export const RoleForm = ({ defaultValues, id }: any) => {
             preRole={preRole}
             preMenu={preMenu}
             role={getValues('privilege')}
-            menu={getValues('menu')}
-            returnValue={handleSetPrivilege}
+            menu={getValues('navigation')}
+            returnPrivilege={handleSetPrivilege}
+            returnNavigation={handleSetNavigation}
           />
         ) : (
           <Loading />

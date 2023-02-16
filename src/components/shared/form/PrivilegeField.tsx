@@ -11,18 +11,105 @@ interface IPrivilegeField {
   preMenu: Object,
   role: Object,
   menu: Object,
-  returnValue?: (value) => void,
+  returnPrivilege?: (value) => void,
+  returnNavigation?: (value) => void,
   isReadOnly?: boolean
 }
 
-export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, role, menu, returnValue, isReadOnly }) => {
+export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, role, menu, returnPrivilege, returnNavigation, isReadOnly }) => {
   const { theme } = useTheme()
   const { device } = useWeb()
   const { language } = useLanguage()
   const [checkSection, setCheckSection] = useState({})
+  const [checkNavigationSection, setCheckNavigationSection] = useState({})
   const [privilege, setPrivilege] = useState({ ...preRole, ...role })
+  const [navigation, setNavigation] = useState({ ...preMenu, ...menu })
   const [checkAll, setCheckAll] = useState(false)
+  const [checkAllNavigation, setCheckAllNavigation] = useState(false)
 
+  // Navigation
+  const handleCheckAllNavigation = (event) => {
+    const checked = event.target.checked
+    let newNavigation = Object.assign({}, navigation)
+
+    Object.keys(preMenu).forEach((route) => {
+      Object.keys(preMenu[route]).forEach((action) => {
+        newNavigation = {
+          ...newNavigation,
+          [route]: {
+            ...newNavigation[route],
+            [action]: checked
+          }
+        }
+      })
+    })
+    setNavigation(newNavigation)
+    if (returnNavigation) {
+      return returnNavigation(newNavigation)
+    }
+  }
+
+  const handleChangeNavigation = (event) => {
+    const names = event.target.name.split('.')
+    const checked = event.target.checked
+    const [menu, navbar] = names
+
+    const newNavigation = Object.assign({}, { ...navigation, [menu]: { ...navigation[menu], [navbar]: checked } })
+    
+    Object.keys(newNavigation[menu]).find(navbar => !newNavigation[menu][navbar])
+      ? setCheckSection({ ...checkSection, [menu]: false }) 
+      : setCheckSection({ ...checkSection, [menu]: true })
+    setNavigation(newNavigation)
+    if (returnNavigation) {
+      return returnNavigation(newNavigation)
+    }
+  }
+
+  const handleChangeAllNavigation = (event) => {
+    const names = event.target.name.split('.')
+    const checked = event.target.checked
+    const [menu] = names
+    let newNavigation = Object.assign({}, navigation)
+
+    Object.keys(preMenu[menu]).forEach((action) => {
+      newNavigation = {
+        ...newNavigation,
+        [menu]: {
+          ...newNavigation[menu],
+          [action]: checked
+        }
+      }
+    })
+    setNavigation(newNavigation)
+    if (returnNavigation) {
+      return returnNavigation(newNavigation)
+    }
+  }
+
+  useEffect(() => {
+    setNavigation({ ...preMenu, ...menu })
+  }, [menu, preMenu])
+  
+
+  useEffect(() => {
+      // Check Parent if all value is checked
+    let checkedAll = {}
+    Object.keys(navigation).forEach((menu) => {
+      Object.keys(navigation[menu]).find(navbar => !navigation[menu][navbar]) 
+        ? checkedAll = { ...checkedAll, [menu]: false }
+        : checkedAll = { ...checkedAll, [menu]: true }
+    })
+
+    Object.keys(checkedAll).find(navbar => !checkedAll[navbar]) 
+        ? setCheckAllNavigation(false)
+        : setCheckAllNavigation(true)
+
+    setCheckNavigationSection(checkedAll)
+  }, [navigation])
+  // End Navigation
+
+
+  // Privilege
   const handleCheckAll = (event) => {
     const checked = event.target.checked
     let newPrivilege = Object.assign({}, privilege)
@@ -39,8 +126,8 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, r
       })
     })
     setPrivilege(newPrivilege)
-    if (returnValue) {
-      return returnValue(newPrivilege)
+    if (returnPrivilege) {
+      return returnPrivilege({ privilege: newPrivilege })
     }
   }
 
@@ -55,8 +142,8 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, r
       ? setCheckSection({ ...checkSection, [route]: false }) 
       : setCheckSection({ ...checkSection, [route]: true })
     setPrivilege(newPrivilege)
-    if (returnValue) {
-      return returnValue(newPrivilege)
+    if (returnPrivilege) {
+      return returnPrivilege({ privilege: newPrivilege })
     }
   }
 
@@ -76,8 +163,8 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, r
       }
     })
     setPrivilege(newPrivilege)
-    if (returnValue) {
-      return returnValue(newPrivilege)
+    if (returnPrivilege) {
+      return returnPrivilege({ privilege: newPrivilege })
     }
   }
 
@@ -101,23 +188,47 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, r
 
     setCheckSection(checkedAll)
   }, [privilege])
+   // End Privilege
 
-  return <CustomPrivilege styled={theme} device={device}>
-    <span className='label'>{label || language['PRIVILEGE']}</span>
-    <div className='checkAll-container'>
-      <CheckboxField disabled={isReadOnly} label='Super Admin' defaultChecked={checkAll} onChange={handleCheckAll} />
-    </div>
-    {Object.keys(preRole).map((role, i) => {
-      return <div key={i} className='privilege-container'>
-        <CheckboxField disabled={isReadOnly} label={role} name={role} defaultChecked={checkSection[role] || false} onChange={handleChangeAllPrivilege} />
-        <div>
-          {
-            Object.keys(preRole[role]).map((action, j) => {
-              return <CheckboxField disabled={isReadOnly} key={j} label={action} name={`${role}.${action}`} defaultChecked={privilege?.[role]?.[action]} onChange={handleChangePrivilege} />
-            })
-          }
-        </div>
+  return <div style={{ display: 'flex', flexDirection: 'column' }}>
+    {/* Navigation */}
+    <CustomPrivilege styled={theme} device={device}>
+      <span className='label'>{label || language['NAVIGATION']}</span>
+      <div className='checkAll-container'>
+        <CheckboxField disabled={isReadOnly} label={language['CHECK_ALL']} defaultChecked={checkAllNavigation} onChange={handleCheckAllNavigation} />
       </div>
-    })}
-  </CustomPrivilege>
+      {Object.keys(preMenu).map((menu, i) => {
+        return <div key={i} className='privilege-container'>
+          <CheckboxField disabled={isReadOnly} label={menu} name={menu} defaultChecked={checkNavigationSection[menu] || false} onChange={handleChangeAllNavigation} />
+          <div>
+            {
+              Object.keys(preMenu[menu]).map((navbar, j) => {
+                return <CheckboxField disabled={isReadOnly} key={j} label={navbar} name={`${menu}.${navbar}`} defaultChecked={navigation?.[menu]?.[navbar]} onChange={handleChangeNavigation} />
+              })
+            }
+          </div>
+        </div>
+      })}
+    </CustomPrivilege>
+
+    {/* Privilege */}
+    <CustomPrivilege styled={theme} device={device}>
+      <span className='label'>{label || language['PRIVILEGE']}</span>
+      <div className='checkAll-container'>
+        <CheckboxField disabled={isReadOnly} label={language['CHECK_ALL']} defaultChecked={checkAll} onChange={handleCheckAll} />
+      </div>
+      {Object.keys(preRole).map((role, i) => {
+        return <div key={i} className='privilege-container'>
+          <CheckboxField disabled={isReadOnly} label={role} name={role} defaultChecked={checkSection[role] || false} onChange={handleChangeAllPrivilege} />
+          <div>
+            {
+              Object.keys(preRole[role]).map((action, j) => {
+                return <CheckboxField disabled={isReadOnly} key={j} label={action} name={`${role}.${action}`} defaultChecked={privilege?.[role]?.[action]} onChange={handleChangePrivilege} />
+              })
+            }
+          </div>
+        </div>
+      })}
+    </CustomPrivilege>
+  </div>
 }

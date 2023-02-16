@@ -7,4 +7,5 @@ export const roleSchema = yup.object().shape({
   status: yup.boolean().optional(),
   description: yup.string().optional(),
   privilege: yup.object().required(),
+  navigation: yup.object().required(),
 })
