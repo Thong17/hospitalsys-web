@@ -218,7 +218,12 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, r
         <CheckboxField disabled={isReadOnly} label={language['CHECK_ALL']} defaultChecked={checkAll} onChange={handleCheckAll} />
       </div>
       {Object.keys(preRole).map((role, i) => {
-        return <div key={i} className='privilege-container'>
+        let isChecked = false
+        Object.keys(navigation).forEach(nav => {
+          if (isChecked) return
+          if (navigation[nav].hasOwnProperty(role) && navigation[nav][role]) isChecked = true
+        })
+        return <div key={i} className='privilege-container' style={{ display: isChecked ? 'block' : 'none' }}>
           <CheckboxField disabled={isReadOnly} label={role} name={role} defaultChecked={checkSection[role] || false} onChange={handleChangeAllPrivilege} />
           <div>
             {
