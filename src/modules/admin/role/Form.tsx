@@ -6,7 +6,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { roleSchema } from './schema'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { getPreRole, selectPreRole, getListRole } from 'shared/redux'
+import { getPreRole, selectPreRole, getListRole, getPreMenu, selectPreMenu } from 'shared/redux'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
 import Loading from 'components/shared/Loading'
 import useWeb from 'hooks/useWeb'
@@ -35,6 +35,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
   const [loading, setLoading] = useState(false)
   const dispatch = useAppDispatch()
   const { data: preRole, status: statusPreRole } = useAppSelector(selectPreRole)
+  const { data: preMenu, status: statusPreMenu } = useAppSelector(selectPreMenu)
 
   const handleSetPrivilege = (privilege) => {
     setValue('privilege', privilege)
@@ -48,6 +49,11 @@ export const RoleForm = ({ defaultValues, id }: any) => {
     if (statusPreRole !== 'INIT') return
     dispatch(getPreRole())
   }, [dispatch, statusPreRole])
+
+  useEffect(() => {
+    if (statusPreMenu !== 'INIT') return
+    dispatch(getPreMenu())
+  }, [dispatch, statusPreMenu])
 
   const submit = async (data) => {
     Axios({
@@ -151,8 +157,10 @@ export const RoleForm = ({ defaultValues, id }: any) => {
       >
         {statusPreRole === 'SUCCESS' ? (
           <PrivilegeField
-            preValue={preRole}
-            value={getValues('privilege')}
+            preRole={preRole}
+            preMenu={preMenu}
+            role={getValues('privilege')}
+            menu={getValues('menu')}
             returnValue={handleSetPrivilege}
           />
         ) : (

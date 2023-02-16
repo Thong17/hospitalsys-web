@@ -5,6 +5,7 @@ export interface IListRole {
   name: object,
   description?: string,
   privilege?: object,
+  navigation?: object,
 }
 
 export interface ShareState {
@@ -17,6 +18,7 @@ export interface ShareState {
   listPresetCash: IBody<any[]>,
   privilege: IBody<Object>,
   preRole: IBody<Object>,
+  preMenu: IBody<Object>,
   adminDashboard: IBody<any>
   organizeDashboard: IBody<any>
   operationDashboard: IBody<any>
@@ -63,6 +65,10 @@ export const initialState: ShareState = {
     status: 'INIT',
   },
   preRole: {
+    data: {},
+    status: 'INIT',
+  },
+  preMenu: {
     data: {},
     status: 'INIT',
   },

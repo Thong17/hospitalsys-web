@@ -7,26 +7,28 @@ import useLanguage from "hooks/useLanguage"
 
 interface IPrivilegeField {
   label?: string,
-  preValue: Object,
-  value: Object,
+  preRole: Object,
+  preMenu: Object,
+  role: Object,
+  menu: Object,
   returnValue?: (value) => void,
   isReadOnly?: boolean
 }
 
-export const PrivilegeField: FC<IPrivilegeField> = ({ label, preValue, value, returnValue, isReadOnly }) => {
+export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, role, menu, returnValue, isReadOnly }) => {
   const { theme } = useTheme()
   const { device } = useWeb()
   const { language } = useLanguage()
   const [checkSection, setCheckSection] = useState({})
-  const [privilege, setPrivilege] = useState({ ...preValue, ...value })
+  const [privilege, setPrivilege] = useState({ ...preRole, ...role })
   const [checkAll, setCheckAll] = useState(false)
 
   const handleCheckAll = (event) => {
     const checked = event.target.checked
     let newPrivilege = Object.assign({}, privilege)
 
-    Object.keys(preValue).forEach((route) => {
-      Object.keys(preValue[route]).forEach((action) => {
+    Object.keys(preRole).forEach((route) => {
+      Object.keys(preRole[route]).forEach((action) => {
         newPrivilege = {
           ...newPrivilege,
           [route]: {
@@ -64,7 +66,7 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preValue, value, re
     const [route] = names
     let newPrivilege = Object.assign({}, privilege)
 
-    Object.keys(preValue[route]).forEach((action) => {
+    Object.keys(preRole[route]).forEach((action) => {
       newPrivilege = {
         ...newPrivilege,
         [route]: {
@@ -80,8 +82,8 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preValue, value, re
   }
 
   useEffect(() => {
-    setPrivilege({ ...preValue, ...value })
-  }, [value, preValue])
+    setPrivilege({ ...preRole, ...role })
+  }, [role, preRole])
   
 
   useEffect(() => {
@@ -105,12 +107,12 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preValue, value, re
     <div className='checkAll-container'>
       <CheckboxField disabled={isReadOnly} label='Super Admin' defaultChecked={checkAll} onChange={handleCheckAll} />
     </div>
-    {Object.keys(preValue).map((role, i) => {
+    {Object.keys(preRole).map((role, i) => {
       return <div key={i} className='privilege-container'>
         <CheckboxField disabled={isReadOnly} label={role} name={role} defaultChecked={checkSection[role] || false} onChange={handleChangeAllPrivilege} />
         <div>
           {
-            Object.keys(preValue[role]).map((action, j) => {
+            Object.keys(preRole[role]).map((action, j) => {
               return <CheckboxField disabled={isReadOnly} key={j} label={action} name={`${role}.${action}`} defaultChecked={privilege?.[role]?.[action]} onChange={handleChangePrivilege} />
             })
           }

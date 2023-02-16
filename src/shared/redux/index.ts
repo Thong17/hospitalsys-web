@@ -138,6 +138,17 @@ export const getPreRole = createAsyncThunk(
   }
 )
 
+export const getPreMenu = createAsyncThunk(
+  'preMenu/get',
+  async () => {
+    const response = await Axios({
+      method: 'GET',
+      url: '/admin/role/preMenu'
+    })
+    return response?.data
+  }
+)
+
 export const getAdminDashboard = createAsyncThunk(
   'dashboard/admin',
   async () => {
@@ -339,6 +350,18 @@ export const sharedSlice = createSlice({
         state.preRole.status = 'SUCCESS'
         state.preRole.data = action.payload.data
       })
+
+      // Get Pre Menu from API
+      .addCase(getPreMenu.pending, (state) => {
+        state.preMenu.status = 'LOADING'
+      })
+      .addCase(getPreMenu.rejected, (state) => {
+        state.preMenu.status = 'FAILED'
+      })
+      .addCase(getPreMenu.fulfilled, (state, action) => {
+        state.preMenu.status = 'SUCCESS'
+        state.preMenu.data = action.payload.data
+      })
       
       // Get Admin Dashboard from API
       .addCase(getAdminDashboard.pending, (state) => {
@@ -390,6 +413,7 @@ export const selectListProduct = (state: RootState) => state.shared.listProduct
 export const selectListCustomer = (state: RootState) => state.shared.listCustomer
 export const selectPrivilege = (state: RootState) => state.shared.privilege
 export const selectPreRole = (state: RootState) => state.shared.preRole
+export const selectPreMenu = (state: RootState) => state.shared.preMenu
 export const selectAdminDashboard = (state: RootState) => state.shared.adminDashboard
 export const selectOrganizeDashboard = (state: RootState) => state.shared.organizeDashboard
 export const selectOperationDashboard = (state: RootState) => state.shared.operationDashboard

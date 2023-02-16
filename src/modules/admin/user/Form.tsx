@@ -4,7 +4,7 @@ import { createUserSchema, updateUserSchema } from './schema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect, useState } from 'react'
 import { IOptions } from 'components/shared/form/SelectField'
-import { getListRole, getPreRole, selectListRole, selectPreRole } from 'shared/redux'
+import { getListRole, getPreMenu, getPreRole, selectListRole, selectPreMenu, selectPreRole } from 'shared/redux'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
 import { getListUser } from './redux'
 import useWeb from 'hooks/useWeb'
@@ -20,6 +20,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
   const dispatch = useAppDispatch()
   const { data: listRole, status: statusListRole } = useAppSelector(selectListRole)
   const { data: preRole, status: statusPreRole } = useAppSelector(selectPreRole)
+  const { data: preMenu, status: statusPreMenu } = useAppSelector(selectPreMenu)
   const {
     reset,
     watch,
@@ -34,7 +35,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
   const { lang, language } = useLanguage()
   const [loading, setLoading] = useState(false)
   const [role, setRole] = useState('')
-  const [privilege, setPrivilege] = useState<any>({ label: '', data: {} })
+  const [permission, setPermission] = useState<any>({ label: '', privilege: {}, navigation: {} })
   const [roleOption, setRoleOption] = useState<IOptions[]>([])
   const roleId = watch('role')
 
@@ -59,7 +60,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
   useEffect(() => {
     const role = listRole.find((value) => value._id === roleId)
     setRole(role?._id || '')
-    setPrivilege({ data: role?.privilege || {}, label: role?.name?.[lang] || role?.name?.['English'] || '' })
+    setPermission({ privilege: role?.privilege || {}, navigation: role?.navigation || {}, label: role?.name?.[lang] || role?.name?.['English'] || '' })
   }, [roleId, listRole, lang])
 
   useEffect(() => {
@@ -71,6 +72,11 @@ export const RoleForm = ({ defaultValues, id }: any) => {
     if (statusPreRole !== 'INIT') return
     dispatch(getPreRole())
   }, [dispatch, statusPreRole])
+
+  useEffect(() => {
+    if (statusPreMenu !== 'INIT') return
+    dispatch(getPreMenu())
+  }, [dispatch, statusPreMenu])
 
   useEffect(() => {
     let options: IOptions[] = []
@@ -182,7 +188,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
         </div>
       </div>
       <div style={{ gridArea: 'privilege' }}>
-        {statusPreRole === 'SUCCESS' ? <PrivilegeField label={`${privilege.label} Privilege Preview`} preValue={preRole} value={privilege.data} isReadOnly={true} /> : <Loading />}
+        {statusPreRole === 'SUCCESS' ? <PrivilegeField label={`${permission.label} Privilege Preview`} preRole={preRole} preMenu={preMenu} menu={permission.navigation} role={permission.privilege} isReadOnly={true} /> : <Loading />}
       </div>
     </form>
   )
