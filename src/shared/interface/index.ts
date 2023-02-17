@@ -1,6 +1,7 @@
+export declare type StatusType = 'SUCCESS' | 'LOADING' | 'FAILED' | 'INIT'
 export interface IBody<T> {
   data: T
-  status: 'SUCCESS' | 'LOADING' | 'FAILED' | 'INIT'
+  status: StatusType
   count?: number
   hasMore?: boolean
 }

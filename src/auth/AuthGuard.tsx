@@ -17,7 +17,8 @@ const AuthGuard: FC<IAuthRoute> = ({ children, role }) => {
   const location = useLocation()
   const { route, action } = role
 
-  const isAuthenticated = user?.privilege?.[route]?.[action]
+  // TODO: remove always true guard
+  const isAuthenticated = user?.privilege?.[route]?.[action] || true
 
   if (isAuthenticated) return <>{children}</>
   

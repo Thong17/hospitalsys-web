@@ -78,12 +78,16 @@ export const HintButton = ({ playlistId }) => {
   const [list, setList] = useState<any>([])
 
   useEffect(() => {
+    let isFetching = true
     getYoutubePlaylist({
       apiKey: process.env.REACT_APP_YOUTUBE_API_KEY,
       playlistId,
     })
-      .then((result) => setList(result))
+      .then((result) => isFetching && setList(result))
       .catch((err) => console.log(err))
+    return () => {
+      isFetching = false
+    }
   }, [playlistId])
 
   return (

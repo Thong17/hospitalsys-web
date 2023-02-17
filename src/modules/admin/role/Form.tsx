@@ -6,8 +6,8 @@ import {
 import { useForm } from 'react-hook-form'
 import { roleSchema } from './schema'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { getPreRole, selectPreRole, getListRole, getPreMenu, selectPreMenu } from 'shared/redux'
-import { useAppDispatch, useAppSelector } from 'app/hooks'
+import { getPreRole, getListRole, getPreMenu } from 'shared/redux'
+import { useAppDispatch } from 'app/hooks'
 import Loading from 'components/shared/Loading'
 import useWeb from 'hooks/useWeb'
 import Button from 'components/shared/Button'
@@ -32,10 +32,10 @@ export const RoleForm = ({ defaultValues, id }: any) => {
   const { theme } = useTheme()
   const { language } = useLanguage()
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const dispatch = useAppDispatch()
-  const { data: preRole, status: statusPreRole } = useAppSelector(selectPreRole)
-  const { data: preMenu, status: statusPreMenu } = useAppSelector(selectPreMenu)
+  const [preRole, setPreRole] = useState({})
+  const [preMenu, setPreMenu] = useState({})
 
   const handleSetPrivilege = (privilege) => {
     setValue('privilege', privilege)
@@ -50,14 +50,23 @@ export const RoleForm = ({ defaultValues, id }: any) => {
   }
 
   useEffect(() => {
-    if (statusPreRole !== 'INIT') return
-    dispatch(getPreRole())
-  }, [dispatch, statusPreRole])
-
-  useEffect(() => {
-    if (statusPreMenu !== 'INIT') return
-    dispatch(getPreMenu())
-  }, [dispatch, statusPreMenu])
+    let isSubscribed = true
+    const role = dispatch(getPreRole()).unwrap()
+    const menu = dispatch(getPreMenu()).unwrap()
+    Promise.all([role, menu])
+      .then(data => {
+        if (!isSubscribed) return
+        if (data[0]?.code !== 'SUCCESS' || data[1]?.code !== 'SUCCESS') return
+        setPreRole(data[0]?.data)
+        setPreMenu(data[1]?.data)
+        setLoading(false)
+      })
+      .catch(err => notify(err?.message, 'error'))
+    return () => {
+      isSubscribed = false
+    }
+    // eslint-disable-next-line
+  }, [dispatch])
 
   const submit = async (data) => {
     Axios({
@@ -159,7 +168,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
       <div
         style={{ gridArea: 'privilege', minHeight: 42, position: 'relative' }}
       >
-        {statusPreRole === 'SUCCESS' ? (
+        {!loading ? (
           <PrivilegeField
             preRole={preRole}
             preMenu={preMenu}

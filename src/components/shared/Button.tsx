@@ -17,7 +17,7 @@ const ButtonRef: ForwardRefRenderFunction<HTMLButtonElement, IButton> = ({ child
   
   return (
     <CustomButton styled={theme} {...prop} ref={ref}>
-      {children}
+      {!loading && children}
       {loading && <Loading />}
     </CustomButton>
   )

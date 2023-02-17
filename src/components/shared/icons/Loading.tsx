@@ -4,7 +4,6 @@ const Loading = () => {
   return (
     <div
       style={{
-        backgroundColor: 'inherit',
         position: 'absolute',
         width: '100%',
         height: '100%',

@@ -89,7 +89,6 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, r
   useEffect(() => {
     setNavigation({ ...preMenu, ...menu })
   }, [menu, preMenu])
-  
 
   useEffect(() => {
       // Check Parent if all value is checked
@@ -107,7 +106,6 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, r
     setCheckNavigationSection(checkedAll)
   }, [navigation])
   // End Navigation
-
 
   // Privilege
   const handleCheckAll = (event) => {
@@ -172,7 +170,6 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, r
     setPrivilege({ ...preRole, ...role })
   }, [role, preRole])
   
-
   useEffect(() => {
       // Check Parent if all value is checked
     let checkedAll = {}

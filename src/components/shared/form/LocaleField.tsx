@@ -42,7 +42,7 @@ export const LocaleField = ({ name, onChange, describe, defaultValue, err, ...pr
               type='text'
               label={language}
               name={`${name}.${language}`}
-              value={localeField[language] || ''}
+              value={localeField?.[language] || ''}
               {...prop}
             />
           )
