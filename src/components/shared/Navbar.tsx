@@ -15,13 +15,14 @@ import useWeb from 'hooks/useWeb'
 import { useEffect, useRef, useState } from 'react'
 import Footer from './Footer'
 import useLanguage from 'hooks/useLanguage'
+import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded'
+import KeyboardArrowLeftRoundedIcon from '@mui/icons-material/KeyboardArrowLeftRounded'
+import { Box, Stack } from '@mui/material'
 
 export const MenuBar = ({ theme, open, toggleSidebar }) => {
   return (
     <CustomMenubar styled={theme} open={open} onClick={() => toggleSidebar()}>
-      <div></div>
-      <div></div>
-      <div></div>
+      {open ? <KeyboardArrowLeftRoundedIcon /> : <KeyboardArrowRightRoundedIcon />}
     </CustomMenubar>
   )
 }
@@ -68,20 +69,30 @@ const Navbar = ({ children }) => {
       }
     >
       {width < 1024 ? (
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', gap: 10 }}>
           <MenuBar
             theme={theme}
             open={navbar}
             toggleSidebar={openNavbar}
           ></MenuBar>
+          <Stack flexDirection='column'>
+            <img src="/logo.png" alt="logo" style={{ width: 32, height: 32 }} />
+          </Stack>
         </div>
       ) : (
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', gap: 10 }}>
           <MenuBar
             theme={theme}
             open={sidebar}
             toggleSidebar={toggleSidebar}
           ></MenuBar>
+          <Stack flexDirection='row' gap={1}>
+            <img src="/logo.png" alt="logo" style={{ width: 32, height: 32 }} />
+            <Stack flexDirection='column' justifyContent='center' sx={{ '& span': { lineHeight: 1 } }}>
+              <Box component='span' sx={{ color: theme.text.secondary, fontSize: theme.responsive[device]?.text.secondary }}>Hospital System</Box>
+              <Box component='span' sx={{ color: theme.text.quaternary, fontSize: theme.responsive[device]?.text.quaternary }}>Description</Box>
+            </Stack>
+          </Stack>
         </div>
       )}
       {width < 1024 ? (

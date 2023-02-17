@@ -37,7 +37,7 @@ export const CustomTableContainer = styled('div')(
       '& tr td': {
         color: styled.text.secondary,
         borderBottom: styled.border.quaternary,
-        fontSize: styled.responsive[device]?.text.quaternary,
+        fontSize: styled.responsive[device]?.text.tertiary,
         fontWeight: styled.font.weight,
         padding: '11px 20px',
         overflow: 'hidden',

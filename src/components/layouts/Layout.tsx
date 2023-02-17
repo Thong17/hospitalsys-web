@@ -7,6 +7,7 @@ import useTheme from 'hooks/useTheme'
 import useConfig from 'hooks/useConfig'
 import useWeb from 'hooks/useWeb'
 import Bottombar from 'components/shared/Bottombar'
+import { Box } from '@mui/material'
 
 const WrapContainer = styled('div')({
   position: 'relative',
@@ -41,33 +42,35 @@ export const Layout: FC<ILayout> = ({ children, navbar }) => {
         fontSize: theme.responsive[device].text.primary,
       }}
     >
-      {device === 'mobile' || device === 'tablet' ? (
-        <Bottombar></Bottombar>
-      ) : (
-        <Sidebar></Sidebar>
-      )}
-      <WrapContainer
-        style={{
-          marginLeft:
-            device === 'laptop' || device === 'desktop' ? SIDEBAR_WIDTH : '0',
-          width:
-            device === 'laptop' || device === 'desktop'
-              ? `calc(100% - ${SIDEBAR_WIDTH}px)`
-              : '100%',
-        }}
-      >
-        <Navbar>{navbar}</Navbar>
-        <ContentContainer
+      <Navbar>{navbar}</Navbar>
+      <Box>
+        {device === 'mobile' || device === 'tablet' ? (
+          <Bottombar></Bottombar>
+        ) : (
+          <Sidebar></Sidebar>
+        )}
+        <WrapContainer
           style={{
-            position: 'relative',
-            color: theme.text.primary,
-            paddingTop: NAVBAR_HEIGHT + SPACE_TOP,
+            marginLeft:
+              device === 'laptop' || device === 'desktop' ? SIDEBAR_WIDTH : '0',
+            width:
+              device === 'laptop' || device === 'desktop'
+                ? `calc(100% - ${SIDEBAR_WIDTH}px)`
+                : '100%',
           }}
         >
-          {children}
-        </ContentContainer>
-        <Footer></Footer>
-      </WrapContainer>
+          <ContentContainer
+            style={{
+              position: 'relative',
+              color: theme.text.primary,
+              paddingTop: NAVBAR_HEIGHT + SPACE_TOP,
+            }}
+          >
+            {children}
+          </ContentContainer>
+          <Footer></Footer>
+        </WrapContainer>
+      </Box>
     </div>
   )
 }

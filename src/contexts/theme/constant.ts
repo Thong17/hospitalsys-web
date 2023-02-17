@@ -190,8 +190,8 @@ export const themeStyle = {
       text: {
         primary: 16,
         secondary: 15,
-        tertiary: 14,
-        quaternary: 13,
+        tertiary: 13,
+        quaternary: 11,
         h5: 19,
         h4: 21,
         h3: 23,
@@ -203,8 +203,8 @@ export const themeStyle = {
       text: {
         primary: 16,
         secondary: 15,
-        tertiary: 14,
-        quaternary: 13,
+        tertiary: 13,
+        quaternary: 11,
         h5: 19,
         h4: 21,
         h3: 23,
@@ -216,8 +216,8 @@ export const themeStyle = {
       text: {
         primary: 16,
         secondary: 15,
-        tertiary: 14,
-        quaternary: 13,
+        tertiary: 13,
+        quaternary: 11,
         h5: 19,
         h4: 21,
         h3: 23,

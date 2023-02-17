@@ -107,7 +107,8 @@ export const CustomSideNav = styled(Stack)(
 export const SideNavContainer = styled('div')(
   ({ open }: { open: boolean }) => ({
     position: 'fixed',
-    height: 'calc(100vh - 16px)',
+    bottom: 0,
+    height: `calc(100vh - ${16 + NAVBAR_HEIGHT}px)`,
     width: open ? 250 : 70,
     transition: '0.3s ease',
     zIndex: 1001,
@@ -197,25 +198,12 @@ export const CustomMenubar = styled('div')(
   ({ styled, open }: { styled: IThemeStyle; open: boolean }) => ({
     width: 30,
     height: 30,
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: 'grid',
+    placeItems: 'center',
     border: styled.border.tertiary,
     borderRadius: styled.radius.primary,
     cursor: 'pointer',
-    '& div': {
-      backgroundColor: styled.text.primary,
-      height: '1px !important',
-      width: '50%',
-      borderRadius: '1px',
-    },
-    '&:hover': {
-      border: styled.border.primary,
-    },
-    '& div:nth-of-type(2)': {
-      width: open && '30% !important',
-    },
+    color: styled.text.secondary
   })
 )
 
@@ -272,12 +260,12 @@ export const CustomNavbar = styled(Stack)(
     },
     transition: '0.3s ease',
     position: 'fixed',
-    left: sidebar,
+    left: 0,
     right: 0,
     zIndex: 1000,
     backgroundColor: styled.background.primary,
     height: NAVBAR_HEIGHT,
-    padding: device === 'mobile' ? '0 20px' : '0 50px',
+    padding: device === 'mobile' ? '0 20px' : '0 30px',
   })
 )
 
