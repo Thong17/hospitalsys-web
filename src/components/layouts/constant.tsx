@@ -19,13 +19,11 @@ export const sideNav: any = [
         route: '/admin/role',
         title: 'ROLE',
         icon: <ArrowRightAltRoundedIcon />,
-        permission: 'role'
       },
       {
         route: '/admin/user',
         title: 'USER',
         icon: <ArrowRightAltRoundedIcon />,
-        permission: 'user'
       },
     ]
   },

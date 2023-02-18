@@ -72,7 +72,7 @@ const Sidebar = () => {
 
   return (
     <SideNavContainer open={sidebar}>
-      <Box sx={{ position: 'absolute', right: '-16px', top: '66px' }}>
+      <Box sx={{ position: 'absolute', right: '-21px', top: '81px' }}>
         {width < 1024 ? (
           <MenuBar
             theme={theme}

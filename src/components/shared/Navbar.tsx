@@ -11,7 +11,9 @@ import Dialog from './Dialog'
 import useWeb from 'hooks/useWeb'
 import { useEffect, useRef, useState } from 'react'
 import Footer from './Footer'
-import { Box, Stack } from '@mui/material'
+import { Box, IconButton, Stack } from '@mui/material'
+import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded'
+import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded'
 
 const Navbar = ({ children }) => {
   const [navbar, setNavbar] = useState(false)
@@ -76,7 +78,7 @@ const Navbar = ({ children }) => {
                 fontSize: theme.responsive[device]?.text.quaternary,
               }}
             >
-              Description
+              International Clinic
             </Box>
           </Stack>
         </Stack>
@@ -95,6 +97,10 @@ const Navbar = ({ children }) => {
       ) : (
         <ListNavbar>{children}</ListNavbar>
       )}
+      <Box>
+        <IconButton><NotificationsRoundedIcon fontSize='small' sx={{ color: theme.text.secondary }} /></IconButton>
+        <IconButton><CalendarMonthRoundedIcon fontSize='small' sx={{ color: theme.text.secondary }} /></IconButton>
+      </Box>
     </CustomNavbar>
   )
 }

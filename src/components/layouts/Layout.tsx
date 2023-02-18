@@ -2,12 +2,13 @@ import { styled } from '@mui/system'
 import { FC, ReactElement } from 'react'
 import Footer from 'components/shared/Footer'
 import Sidebar from 'components/shared/Sidebar'
-import Navbar from 'components/shared/Navbar'
 import useTheme from 'hooks/useTheme'
 import useConfig from 'hooks/useConfig'
 import useWeb from 'hooks/useWeb'
 import Bottombar from 'components/shared/Bottombar'
 import { Box } from '@mui/material'
+import { NAVBAR_HEIGHT } from 'styles/constant'
+import Navbar from 'components/shared/Navbar'
 
 const WrapContainer = styled('div')({
   position: 'relative',
@@ -17,10 +18,9 @@ const WrapContainer = styled('div')({
 
 const ContentContainer = styled('div')({
   width: '100%',
-  minHeight: 'calc(100vh - 170px)',
+  minHeight: `calc(100vh - ${90 + NAVBAR_HEIGHT}px)`,
 })
 
-const NAVBAR_HEIGHT = 70
 interface ILayout {
   navbar?: ReactElement
 }

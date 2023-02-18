@@ -2,7 +2,7 @@ import { styled } from '@mui/system'
 import { Button, Menu, Stack } from '@mui/material'
 import { IThemeMode, IThemeStyle } from 'contexts/theme/interface'
 import { DeviceOptions } from 'contexts/web/interface'
-import { NAVBAR_HEIGHT, PROFILE_HEIGHT } from './constant'
+import { NAVBAR_HEIGHT, PROFILE_HEIGHT, SIDEBAR_COMPACT_WIDTH, SIDEBAR_EXPAND_WIDTH } from './constant'
 
 export const CustomBottomNav = styled('div')(
   ({ styled }: { styled: IThemeStyle }) => ({
@@ -108,8 +108,8 @@ export const SideNavContainer = styled('div')(
   ({ open }: { open: boolean }) => ({
     position: 'fixed',
     bottom: 0,
-    height: `calc(100vh - ${16 + NAVBAR_HEIGHT + PROFILE_HEIGHT}px)`,
-    width: open ? 250 : 70,
+    height: `calc(100vh - ${16 + PROFILE_HEIGHT}px)`,
+    width: open ? SIDEBAR_EXPAND_WIDTH : SIDEBAR_COMPACT_WIDTH,
     transition: '0.3s ease',
     zIndex: 1001,
     padding: '8px 0 8px 8px',
@@ -201,13 +201,15 @@ export const CustomLoading = styled('div')(
 
 export const CustomMenubar = styled('div')(
   ({ styled, open }: { styled: IThemeStyle; open: boolean }) => ({
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     display: 'grid',
     placeItems: 'center',
     borderRadius: styled.radius.circle,
     backgroundColor: styled.background.secondary,
-    boxShadow: styled.shadow.primary,
+    border: styled.border.primary,
+    borderWidth: 3,
+    borderColor: styled.background.primary,
     cursor: 'pointer',
     color: styled.text.secondary
   })
@@ -266,7 +268,7 @@ export const CustomNavbar = styled(Stack)(
     },
     transition: '0.3s ease',
     position: 'fixed',
-    left: 0,
+    left: sidebar,
     right: 0,
     zIndex: 1000,
     backgroundColor: styled.background.primary,
