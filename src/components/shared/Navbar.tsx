@@ -1,10 +1,7 @@
-import useAuth from 'hooks/useAuth'
 import useTheme from 'hooks/useTheme'
-import { Link, useLocation } from 'react-router-dom'
-import Profile from './Profile'
+import { useLocation } from 'react-router-dom'
 import useConfig from 'hooks/useConfig'
 import {
-  CustomMenubar,
   ListNavbar,
   RowNavbar,
   CustomNavbar,
@@ -14,32 +11,15 @@ import Dialog from './Dialog'
 import useWeb from 'hooks/useWeb'
 import { useEffect, useRef, useState } from 'react'
 import Footer from './Footer'
-import useLanguage from 'hooks/useLanguage'
-import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded'
-import KeyboardArrowLeftRoundedIcon from '@mui/icons-material/KeyboardArrowLeftRounded'
 import { Box, Stack } from '@mui/material'
-
-export const MenuBar = ({ theme, open, toggleSidebar }) => {
-  return (
-    <CustomMenubar styled={theme} open={open} onClick={() => toggleSidebar()}>
-      {open ? <KeyboardArrowLeftRoundedIcon /> : <KeyboardArrowRightRoundedIcon />}
-    </CustomMenubar>
-  )
-}
 
 const Navbar = ({ children }) => {
   const [navbar, setNavbar] = useState(false)
-  const { user } = useAuth()
   const { theme } = useTheme()
-  const { language } = useLanguage()
-  const { toggleSidebar, sidebar } = useConfig()
+  const { sidebar } = useConfig()
   const { device, width } = useWeb()
   const navRef = useRef<HTMLDivElement>(document.createElement('div'))
   const location = useLocation()
-
-  const openNavbar = () => {
-    setNavbar(true)
-  }
 
   const closeNavbar = (event) => {
     !navRef.current.contains(event.target) && setNavbar(false)
@@ -69,31 +49,37 @@ const Navbar = ({ children }) => {
       }
     >
       {width < 1024 ? (
-        <div style={{ display: 'flex', gap: 10 }}>
-          <MenuBar
-            theme={theme}
-            open={navbar}
-            toggleSidebar={openNavbar}
-          ></MenuBar>
-          <Stack flexDirection='column'>
-            <img src="/logo.png" alt="logo" style={{ width: 32, height: 32 }} />
-          </Stack>
-        </div>
+        <Stack flexDirection='column'>
+          <img src='/logo.png' alt='logo' style={{ width: 32, height: 32 }} />
+        </Stack>
       ) : (
-        <div style={{ display: 'flex', gap: 10 }}>
-          <MenuBar
-            theme={theme}
-            open={sidebar}
-            toggleSidebar={toggleSidebar}
-          ></MenuBar>
-          <Stack flexDirection='row' gap={1}>
-            <img src="/logo.png" alt="logo" style={{ width: 32, height: 32 }} />
-            <Stack flexDirection='column' justifyContent='center' sx={{ '& span': { lineHeight: 1 } }}>
-              <Box component='span' sx={{ color: theme.text.secondary, fontSize: theme.responsive[device]?.text.secondary }}>Hospital System</Box>
-              <Box component='span' sx={{ color: theme.text.quaternary, fontSize: theme.responsive[device]?.text.quaternary }}>Description</Box>
-            </Stack>
+        <Stack flexDirection='row' gap={1}>
+          <img src='/logo.png' alt='logo' style={{ width: 32, height: 32 }} />
+          <Stack
+            flexDirection='column'
+            justifyContent='center'
+            sx={{ '& span': { lineHeight: 1 } }}
+          >
+            <Box
+              component='span'
+              sx={{
+                color: theme.text.secondary,
+                fontSize: theme.responsive[device]?.text.secondary,
+              }}
+            >
+              Hospital System
+            </Box>
+            <Box
+              component='span'
+              sx={{
+                color: theme.text.quaternary,
+                fontSize: theme.responsive[device]?.text.quaternary,
+              }}
+            >
+              Description
+            </Box>
           </Stack>
-        </div>
+        </Stack>
       )}
       {width < 1024 ? (
         <Dialog display={navbar}>
@@ -108,11 +94,6 @@ const Navbar = ({ children }) => {
         </Dialog>
       ) : (
         <ListNavbar>{children}</ListNavbar>
-      )}
-      {user?.id ? (
-        <Profile id={user.id} username={user.username} picture={user.photo} />
-      ) : (
-        <Link to='/login'>{language['LOGIN']}</Link>
       )}
     </CustomNavbar>
   )

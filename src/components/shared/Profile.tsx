@@ -8,14 +8,16 @@ import PersonRoundedIcon from '@mui/icons-material/PersonRounded'
 import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded'
 import { useNavigate } from 'react-router-dom'
 import useLanguage from 'hooks/useLanguage'
+import { Box } from '@mui/system'
 
 interface IProfile {
   id: string
   username: string
   picture?: string
+  sidebar: boolean
 }
 
-const Profile: FC<IProfile> = ({ id, username, picture }) => {
+const Profile: FC<IProfile> = ({ id, username, picture, sidebar }) => {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
   const { logout } = useAuth()
   const { theme } = useTheme()
@@ -26,20 +28,23 @@ const Profile: FC<IProfile> = ({ id, username, picture }) => {
     <>
       {username && (
         <CustomProfile
+          sidebar={sidebar ? 'open' : 'close'}
           styled={theme}
           aria-controls='profile-menu'
           onClick={(event) => setAnchorEl(event.currentTarget)}
         >
-          {picture ? (
-            <img
-              src={`${process.env.REACT_APP_API_UPLOADS}${picture}`}
-              alt={username}
-              loading='lazy'
-            />
-          ) : (
-            <div style={{ alignItems: 'center' }}>{username[0]}</div>
-          )}
-          {username}
+          <Box id='profile'>
+            {picture ? (
+              <img
+                src={`${process.env.REACT_APP_API_UPLOADS}${picture}`}
+                alt={username}
+                loading='lazy'
+              />
+            ) : (
+              <div style={{ alignItems: 'center' }}>{username[0]}</div>
+            )}
+          </Box>
+          <Box id='username' component='span'>{username}</Box>
         </CustomProfile>
       )}
       <Menu
@@ -52,10 +57,12 @@ const Profile: FC<IProfile> = ({ id, username, picture }) => {
         }}
       >
         <MenuItem onClick={() => navigate(`/user/${id}`)}>
-          <PersonRoundedIcon style={{ marginRight: 10 }} /> {language['PROFILE']}
+          <PersonRoundedIcon style={{ marginRight: 10 }} />{' '}
+          {language['PROFILE']}
         </MenuItem>
         <MenuItem onClick={() => navigate(`/change-password/${id}`)}>
-          <VpnKeyRoundedIcon style={{ marginRight: 10 }} /> {language['CHANGE_PASSWORD']}
+          <VpnKeyRoundedIcon style={{ marginRight: 10 }} />{' '}
+          {language['CHANGE_PASSWORD']}
         </MenuItem>
         <MenuItem onClick={() => logout()}>
           <LogoutRoundedIcon style={{ marginRight: 10 }} /> {language['LOGOUT']}

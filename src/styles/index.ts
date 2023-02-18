@@ -2,7 +2,7 @@ import { styled } from '@mui/system'
 import { Button, Menu, Stack } from '@mui/material'
 import { IThemeMode, IThemeStyle } from 'contexts/theme/interface'
 import { DeviceOptions } from 'contexts/web/interface'
-import { NAVBAR_HEIGHT } from './constant'
+import { NAVBAR_HEIGHT, PROFILE_HEIGHT } from './constant'
 
 export const CustomBottomNav = styled('div')(
   ({ styled }: { styled: IThemeStyle }) => ({
@@ -60,7 +60,7 @@ export const CustomSideNav = styled(Stack)(
   ({ styled }: { styled: IThemeStyle }) => ({
     height: '100%',
     width: '100%',
-    paddingTop: 20,
+    paddingTop: 37,
     boxSizing: 'border-box',
     backgroundColor: styled.background.secondary,
     boxShadow: styled.shadow.secondary,
@@ -108,7 +108,7 @@ export const SideNavContainer = styled('div')(
   ({ open }: { open: boolean }) => ({
     position: 'fixed',
     bottom: 0,
-    height: `calc(100vh - ${16 + NAVBAR_HEIGHT}px)`,
+    height: `calc(100vh - ${16 + NAVBAR_HEIGHT + PROFILE_HEIGHT}px)`,
     width: open ? 250 : 70,
     transition: '0.3s ease',
     zIndex: 1001,
@@ -151,31 +151,33 @@ export const CustomFooter = styled(Stack)(
   })
 )
 
-export const CustomProfile = styled(Button)(
-  ({ styled }: { styled: IThemeStyle }) => ({
+export const CustomProfile = styled('div')(
+  ({ styled, sidebar }: { styled: IThemeStyle, sidebar: 'open' | 'close' }) => ({
+    height: '54px',
+    width: '54px',
     backgroundColor: styled.background.primary,
-    color: styled.text.primary,
-    display: 'flex',
-    padding: '5px 13px 5px 5px',
-    borderRadius: styled.radius.rounded,
-    border: styled.border.tertiary,
-    alignItems: 'center',
-    textTransform: 'none',
-    '& img,div': {
-      zIndex: 100,
+    borderRadius: '50%',
+    color: styled.text.secondary,
+    display: 'grid',
+    placeItems: 'center',
+    padding: '3px',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    position: 'relative',
+    '& #profile': {
+      height: '100%',
+      width: '100%',
       backgroundColor: styled.background.secondary,
-      width: 30,
-      height: 30,
-      marginRight: 8,
-      borderRadius: styled.radius.circle,
-      boxShadow: styled.shadow.secondary,
-      objectFit: 'cover'
+      borderRadius: '50%',
+      display: 'grid',
+      placeItems: 'center',
     },
-    '& div': {
-      display: 'flex',
-      justifyContent: 'center',
-      textTransform: 'capitalize',
-    },
+    '& #username': {
+      position: 'absolute',
+      right: '-50px',
+      top: '10px',
+      display: sidebar === 'open' ? 'block' : 'none'
+    }
   })
 )
 
@@ -200,8 +202,9 @@ export const CustomMenubar = styled('div')(
     height: 30,
     display: 'grid',
     placeItems: 'center',
-    border: styled.border.tertiary,
-    borderRadius: styled.radius.primary,
+    borderRadius: styled.radius.circle,
+    backgroundColor: styled.background.secondary,
+    boxShadow: styled.shadow.primary,
     cursor: 'pointer',
     color: styled.text.secondary
   })
