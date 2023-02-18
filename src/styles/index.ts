@@ -152,7 +152,7 @@ export const CustomFooter = styled(Stack)(
 )
 
 export const CustomProfile = styled('div')(
-  ({ styled, sidebar }: { styled: IThemeStyle, sidebar: 'open' | 'close' }) => ({
+  ({ styled, sidebar, device }: { styled: IThemeStyle, sidebar: 'open' | 'close', device: DeviceOptions }) => ({
     height: '54px',
     width: '54px',
     backgroundColor: styled.background.primary,
@@ -174,9 +174,12 @@ export const CustomProfile = styled('div')(
     },
     '& #username': {
       position: 'absolute',
-      right: '-50px',
+      right: '-183px',
       top: '10px',
-      display: sidebar === 'open' ? 'block' : 'none'
+      opacity: sidebar === 'open' ? '1' : '0',
+      width: '180px',
+      fontSize: styled.responsive[device]?.text.secondary,
+      transition: sidebar === 'open' ? '0.3s 0.1s ease' : '0',
     }
   })
 )

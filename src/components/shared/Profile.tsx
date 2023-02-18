@@ -9,6 +9,8 @@ import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded'
 import { useNavigate } from 'react-router-dom'
 import useLanguage from 'hooks/useLanguage'
 import { Box } from '@mui/system'
+import { TextEllipsis } from './TextEllipsis'
+import useWeb from 'hooks/useWeb'
 
 interface IProfile {
   id: string
@@ -22,6 +24,7 @@ const Profile: FC<IProfile> = ({ id, username, picture, sidebar }) => {
   const { logout } = useAuth()
   const { theme } = useTheme()
   const { language } = useLanguage()
+  const { device } = useWeb()
   const navigate = useNavigate()
 
   return (
@@ -30,6 +33,7 @@ const Profile: FC<IProfile> = ({ id, username, picture, sidebar }) => {
         <CustomProfile
           sidebar={sidebar ? 'open' : 'close'}
           styled={theme}
+          device={device}
           aria-controls='profile-menu'
           onClick={(event) => setAnchorEl(event.currentTarget)}
         >
@@ -44,7 +48,9 @@ const Profile: FC<IProfile> = ({ id, username, picture, sidebar }) => {
               <div style={{ alignItems: 'center' }}>{username[0]}</div>
             )}
           </Box>
-          <Box id='username' component='span'>{username}</Box>
+          <Box id='username' component='span'>
+            <TextEllipsis title={username}>{username}</TextEllipsis>
+          </Box>
         </CustomProfile>
       )}
       <Menu
