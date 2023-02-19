@@ -125,7 +125,7 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, r
     })
     setPrivilege(newPrivilege)
     if (returnPrivilege) {
-      return returnPrivilege({ privilege: newPrivilege })
+      return returnPrivilege(newPrivilege)
     }
   }
 
@@ -141,7 +141,7 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, r
       : setCheckSection({ ...checkSection, [route]: true })
     setPrivilege(newPrivilege)
     if (returnPrivilege) {
-      return returnPrivilege({ privilege: newPrivilege })
+      return returnPrivilege(newPrivilege)
     }
   }
 
@@ -162,7 +162,7 @@ export const PrivilegeField: FC<IPrivilegeField> = ({ label, preRole, preMenu, r
     })
     setPrivilege(newPrivilege)
     if (returnPrivilege) {
-      return returnPrivilege({ privilege: newPrivilege })
+      return returnPrivilege(newPrivilege)
     }
   }
 

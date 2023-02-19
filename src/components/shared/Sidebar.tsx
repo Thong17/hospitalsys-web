@@ -12,6 +12,7 @@ import useWeb from 'hooks/useWeb'
 import { Box } from '@mui/material'
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded'
 import KeyboardArrowLeftRoundedIcon from '@mui/icons-material/KeyboardArrowLeftRounded'
+import SettingsIcon from '@mui/icons-material/Settings'
 import Profile from './Profile'
 
 export const MenuBar = ({ theme, open, toggleSidebar }) => {
@@ -89,96 +90,109 @@ const Sidebar = () => {
       </Box>
       <Box sx={{ position: 'absolute', top: '-20px', left: '16px' }}>
         {user?.id ? (
-          <Profile sidebar={sidebar} id={user.id} username={user.username} picture={user.photo} />
+          <Profile
+            sidebar={sidebar}
+            id={user.id}
+            username={user.username}
+            picture={user.photo}
+          />
         ) : (
           <Link to='/login'>{language['LOGIN']}</Link>
         )}
       </Box>
       <CustomSideNav
         direction='column'
-        justifyContent='start'
+        justifyContent='space-between'
         alignItems='start'
         className='side-nav'
         styled={theme}
       >
-        {sideNav.map((nav, index) => {
-          const permission = nav.permission
-            ? user?.privilege?.menu?.[nav.permission]
-            : true
-          if (permission) {
-            if (!nav.children) {
-              return (
-                <NavLink key={index} to={nav.route}>
-                  {nav.icon}
-                  <span>{language?.[nav.title] || nav.title}</span>
-                </NavLink>
-              )
-            }
-
-            return (
-              <div key={index} className='link'>
-                <NavLink
-                  key={index}
-                  to={nav.route}
-                  style={{
-                    width: 'calc(100% - 22px)',
-                    paddingRight: 7,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ width: '100%' }}>
+          {sideNav.map((nav, index) => {
+            const permission = nav.permission
+              ? user?.privilege?.menu?.[nav.permission]
+              : true
+            if (permission) {
+              if (!nav.children) {
+                return (
+                  <NavLink key={index} to={nav.route}>
                     {nav.icon}
                     <span>{language?.[nav.title] || nav.title}</span>
-                  </div>
-                  {expandTabs.includes(nav.title) ? (
-                    <ExpandLessRoundedIcon
-                      className='toggle'
-                      onClick={(event) =>
-                        handleExpandLessTabs(event, nav.title)
-                      }
-                    />
-                  ) : (
-                    <ExpandMoreRoundedIcon
-                      className='toggle'
-                      onClick={(event) =>
-                        handleExpandMoreTabs(event, nav.title)
-                      }
-                    />
+                  </NavLink>
+                )
+              }
+
+              return (
+                <div key={index} className='link'>
+                  <NavLink
+                    key={index}
+                    to={nav.route}
+                    style={{
+                      width: 'calc(100% - 22px)',
+                      paddingRight: 7,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      boxSizing: 'border-box',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      {nav.icon}
+                      <span>{language?.[nav.title] || nav.title}</span>
+                    </div>
+                    {expandTabs.includes(nav.title) ? (
+                      <ExpandLessRoundedIcon
+                        className='toggle'
+                        onClick={(event) =>
+                          handleExpandLessTabs(event, nav.title)
+                        }
+                      />
+                    ) : (
+                      <ExpandMoreRoundedIcon
+                        className='toggle'
+                        onClick={(event) =>
+                          handleExpandMoreTabs(event, nav.title)
+                        }
+                      />
+                    )}
+                  </NavLink>
+                  {expandTabs.includes(nav.title) && (
+                    <div style={{ paddingLeft: 10, boxSizing: 'border-box' }}>
+                      {nav.children.map((sub, subIndex) => {
+                        const permission = sub.permission
+                          ? user?.privilege.menu?.[sub.permission]
+                          : true
+                        if (permission) {
+                          return (
+                            <NavLink key={subIndex} to={sub.route}>
+                              {sub.icon}
+                              <span>{language?.[sub.title] || sub.title}</span>
+                            </NavLink>
+                          )
+                        } else {
+                          return (
+                            <span
+                              key={subIndex}
+                              style={{ display: 'none' }}
+                            ></span>
+                          )
+                        }
+                      })}
+                    </div>
                   )}
-                </NavLink>
-                {expandTabs.includes(nav.title) && (
-                  <div style={{ paddingLeft: 10, boxSizing: 'border-box' }}>
-                    {nav.children.map((sub, subIndex) => {
-                      const permission = sub.permission
-                        ? user?.privilege.menu?.[sub.permission]
-                        : true
-                      if (permission) {
-                        return (
-                          <NavLink key={subIndex} to={sub.route}>
-                            {sub.icon}
-                            <span>{language?.[sub.title] || sub.title}</span>
-                          </NavLink>
-                        )
-                      } else {
-                        return (
-                          <span
-                            key={subIndex}
-                            style={{ display: 'none' }}
-                          ></span>
-                        )
-                      }
-                    })}
-                  </div>
-                )}
-              </div>
-            )
-          } else {
-            return <span key={index} style={{ display: 'none' }}></span>
-          }
-        })}
+                </div>
+              )
+            } else {
+              return <span key={index} style={{ display: 'none' }}></span>
+            }
+          })}
+        </Box>
+        <Box sx={{ width: '100%' }}>
+          <NavLink to='/config'>
+            <SettingsIcon />
+            <span>{language?.['CONFIG'] || 'CONFIG'}</span>
+          </NavLink>
+        </Box>
       </CustomSideNav>
     </SideNavContainer>
   )

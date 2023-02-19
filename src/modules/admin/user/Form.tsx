@@ -4,7 +4,7 @@ import { createUserSchema, updateUserSchema } from './schema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect, useState } from 'react'
 import { IOptions } from 'components/shared/form/SelectField'
-import { getListRole, getPreMenu, getPreRole, selectListRole, selectPreMenu, selectPreRole } from 'shared/redux'
+import { getListRole, getPreMenu, getPreRole, selectListRole } from 'shared/redux'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
 import { getListUser } from './redux'
 import useWeb from 'hooks/useWeb'
@@ -19,8 +19,6 @@ import { useNavigate } from 'react-router-dom'
 export const RoleForm = ({ defaultValues, id }: any) => {
   const dispatch = useAppDispatch()
   const { data: listRole, status: statusListRole } = useAppSelector(selectListRole)
-  const { data: preRole, status: statusPreRole } = useAppSelector(selectPreRole)
-  const { data: preMenu, status: statusPreMenu } = useAppSelector(selectPreMenu)
   const {
     reset,
     watch,
@@ -33,11 +31,33 @@ export const RoleForm = ({ defaultValues, id }: any) => {
   const navigate = useNavigate()
   const { notify } = useNotify()
   const { lang, language } = useLanguage()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [role, setRole] = useState('')
   const [permission, setPermission] = useState<any>({ label: '', privilege: {}, navigation: {} })
   const [roleOption, setRoleOption] = useState<IOptions[]>([])
   const roleId = watch('role')
+
+  const [preRole, setPreRole] = useState({})
+  const [preMenu, setPreMenu] = useState({})
+
+  useEffect(() => {
+    let isSubscribed = true
+    const role = dispatch(getPreRole()).unwrap()
+    const menu = dispatch(getPreMenu()).unwrap()
+    Promise.all([role, menu])
+      .then(data => {
+        if (!isSubscribed) return
+        if (data[0]?.code !== 'SUCCESS' || data[1]?.code !== 'SUCCESS') return
+        setPreRole(data[0]?.data)
+        setPreMenu(data[1]?.data)
+        setLoading(false)
+      })
+      .catch(err => notify(err?.message, 'error'))
+    return () => {
+      isSubscribed = false
+    }
+    // eslint-disable-next-line
+  }, [dispatch])
 
   const submit = async (data) => {
     setLoading(true)
@@ -59,6 +79,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
 
   useEffect(() => {
     const role = listRole.find((value) => value._id === roleId)
+    
     setRole(role?._id || '')
     setPermission({ privilege: role?.privilege || {}, navigation: role?.navigation || {}, label: role?.name?.[lang] || role?.name?.['English'] || '' })
   }, [roleId, listRole, lang])
@@ -67,16 +88,6 @@ export const RoleForm = ({ defaultValues, id }: any) => {
     if (statusListRole !== 'INIT') return
     dispatch(getListRole())
   }, [dispatch, statusListRole])
-
-  useEffect(() => {
-    if (statusPreRole !== 'INIT') return
-    dispatch(getPreRole())
-  }, [dispatch, statusPreRole])
-
-  useEffect(() => {
-    if (statusPreMenu !== 'INIT') return
-    dispatch(getPreMenu())
-  }, [dispatch, statusPreMenu])
 
   useEffect(() => {
     let options: IOptions[] = []
@@ -188,7 +199,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
         </div>
       </div>
       <div style={{ gridArea: 'privilege' }}>
-        {statusPreRole === 'SUCCESS' ? <PrivilegeField label={`${permission.label} Privilege Preview`} preRole={preRole} preMenu={preMenu} menu={permission.navigation} role={permission.privilege} isReadOnly={true} /> : <Loading />}
+        {!loading ? <PrivilegeField label={`${permission.label} Privilege Preview`} preRole={preRole} preMenu={preMenu} menu={permission.navigation} role={permission.privilege} isReadOnly={true} /> : <Loading />}
       </div>
     </form>
   )
