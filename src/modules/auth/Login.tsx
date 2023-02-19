@@ -15,6 +15,10 @@ import Footer from 'components/shared/Footer'
 import { useState } from 'react'
 import useLanguage from 'hooks/useLanguage'
 
+const particlesInit = async (main) => {
+  await loadFull(main)
+}
+
 export const Login = () => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -29,10 +33,6 @@ export const Login = () => {
   const { device } = useWeb()
   const { language } = useLanguage()
   const [loading, setLoading] = useState(false)
-
-  const particlesInit = async (main) => {
-    await loadFull(main)
-  }
 
   const form = async (data) => {
     setLoading(true)
