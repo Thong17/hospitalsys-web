@@ -171,6 +171,12 @@ export const CustomProfile = styled('div')(
       borderRadius: '50%',
       display: 'grid',
       placeItems: 'center',
+      overflow: 'hidden',
+      '& img': {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover'
+      }
     },
     '& #username': {
       position: 'absolute',

@@ -1,13 +1,13 @@
 
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 // import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded'
-import HouseRoundedIcon from '@mui/icons-material/HouseRounded'
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 
 export const sideNav: any = [
   {
     route: '/home',
     title: 'HOME',
-    icon: <HouseRoundedIcon />,
+    icon: <HomeRoundedIcon />,
   },
   {
     route: '/admin',
