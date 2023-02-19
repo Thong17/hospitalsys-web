@@ -110,7 +110,7 @@ const Sidebar = () => {
         <Box sx={{ width: '100%' }}>
           {sideNav.map((nav, index) => {
             const permission = nav.permission
-              ? user?.privilege?.menu?.[nav.permission]
+              ? Object.values(user?.navigation?.[nav.permission] || {}).indexOf(true) > -1
               : true
             if (permission) {
               if (!nav.children) {

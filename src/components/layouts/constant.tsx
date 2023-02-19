@@ -13,6 +13,7 @@ export const sideNav: any = [
     route: '/admin',
     title: 'ADMIN',
     icon: <AdminPanelSettingsIcon />,
+    permission: 'admin'
     // children: [
     //   {
     //     route: '/admin/role',

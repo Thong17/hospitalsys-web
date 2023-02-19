@@ -5,6 +5,7 @@ export interface IUser {
   id: string
   username: string
   privilege: any
+  navigation: any
   photo?: string
   theme?: ThemeOptions
   language?: LanguageOptions
