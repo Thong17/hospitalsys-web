@@ -97,7 +97,7 @@ const Sidebar = () => {
             picture={user.photo}
           />
         ) : (
-          <Link to='/login'>{language['LOGIN']}</Link>
+          <Link style={{ color: theme.text.secondary }} to='/login'>{language['LOGIN']}</Link>
         )}
       </Box>
       <CustomSideNav

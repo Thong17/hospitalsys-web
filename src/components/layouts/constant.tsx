@@ -1,9 +1,8 @@
 
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
-// import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded'
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
-import StorefrontRoundedIcon from '@mui/icons-material/StorefrontRounded'
 import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded'
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
+import WidgetsRoundedIcon from '@mui/icons-material/WidgetsRounded'
 
 export const sideNav: any = [
   {
@@ -14,7 +13,7 @@ export const sideNav: any = [
   {
     route: '/organize',
     title: 'ORGANIZE',
-    icon: <StorefrontRoundedIcon />,
+    icon: <WidgetsRoundedIcon />,
     children: [
       {
         route: '/organize/brand',
@@ -37,23 +36,18 @@ export const sideNav: any = [
     route: '/admin',
     title: 'ADMIN',
     icon: <AdminPanelSettingsIcon />,
-    permission: 'admin'
-    // children: [
-    //   {
-    //     route: '/admin/role',
-    //     title: 'ROLE',
-    //     icon: <ArrowRightAltRoundedIcon />,
-    //   },
-    //   {
-    //     route: '/admin/user',
-    //     title: 'USER',
-    //     icon: <ArrowRightAltRoundedIcon />,
-    //   },
-    // ]
+    permission: 'admin',
+    children: [
+      {
+        route: '/admin/role',
+        title: 'ROLE',
+        icon: <ArrowRightAltRoundedIcon />,
+      },
+      {
+        route: '/admin/user',
+        title: 'USER',
+        icon: <ArrowRightAltRoundedIcon />,
+      },
+    ]
   },
-  // {
-  //   route: '/config',
-  //   title: 'SETTING',
-  //   icon: <SettingsIcon />,
-  // },
 ]
