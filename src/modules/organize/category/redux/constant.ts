@@ -1,14 +1,22 @@
+import { Omit } from 'react-redux'
 import { IBody } from 'shared/interface'
 
-export interface ICategoryBody {
+export interface ICategory {
   name: Object,
   status: boolean,
   icon: any,
   description: string,
-  properties: any[]
+  properties: []
 }
 
-export const initState: ICategoryBody = {
+export const initBody: Omit<ICategory, 'properties'> = {
+  name: {},
+  status: true,
+  icon: null,
+  description: '',
+}
+
+export const initState: ICategory = {
   name: {},
   status: true,
   icon: null,
@@ -18,7 +26,7 @@ export const initState: ICategoryBody = {
 
 export interface CategoryState {
   list: IBody<any[]>
-  detail: IBody<ICategoryBody>
+  detail: IBody<ICategory>
 }
 
 export const initialState: CategoryState = {

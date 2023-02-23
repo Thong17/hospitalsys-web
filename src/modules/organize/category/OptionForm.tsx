@@ -118,7 +118,7 @@ export const OptionForm = ({
                           `,
         }}
       >
-        <div style={{ gridArea: 'option' }}>
+        <div style={{ gridArea: 'option', marginBottom: '20px' }}>
           <LocaleField
             name='name'
             err={errors?.name}

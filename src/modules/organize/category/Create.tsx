@@ -2,7 +2,7 @@ import React from 'react'
 import CategoryForm from './Form'
 import Container from 'components/shared/Container'
 import StoreBreadcrumbs from '../components/Breadcrumbs'
-import { initState } from './redux/constant'
+import { initBody } from './redux/constant'
 
 const Header = () => {
     return <><StoreBreadcrumbs page='categoryCreate' /></>
@@ -11,7 +11,7 @@ const Header = () => {
 export const CreateCategory = () => {
   return (
     <Container header={<Header />}>
-      <CategoryForm defaultValues={initState} />
+      <CategoryForm defaultValues={initBody} />
     </Container>
   )
 }

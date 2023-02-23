@@ -32,6 +32,58 @@ export const getCategory = createAsyncThunk(
   }
 )
 
+export const createCategory = createAsyncThunk(
+  'category/create',
+  async ({ body }: { body: any }) => {
+    const response = await Axios({
+      method: 'POST',
+      url: `/organize/category/create`,
+      body: body
+    })
+    
+    return response
+  }
+)
+
+export const updateCategory = createAsyncThunk(
+  'category/update',
+  async ({ id, body }: { id: string, body: any }) => {
+    const response = await Axios({
+      method: 'PUT',
+      url: `/organize/category/update/${id}`,
+      body: body
+    })
+    
+    return response
+  }
+)
+
+export const createCategoryProperty = createAsyncThunk(
+  'categoryProperty/create',
+  async ({ body }: { body: any }) => {
+    const response = await Axios({
+      method: 'POST',
+      url: `/organize/category/property/create`,
+      body
+    })
+    
+    return response
+  }
+)
+
+export const createCategoryOption = createAsyncThunk(
+  'categoryOption/create',
+  async ({id, body}: { id: string, body: any }) => {
+    const response = await Axios({
+      method: 'POST',
+      url: `/organize/category/${id}/option`,
+      body: body
+    })
+    
+    return response
+  }
+)
+
 export const categorySlice = createSlice({
   name: 'category',
   initialState,

@@ -11,6 +11,10 @@ import useWeb from 'hooks/useWeb'
 import { useEffect, useState } from 'react'
 import { DialogTitle } from 'components/shared/DialogTitle'
 import { IOptions, SelectField } from 'components/shared/form/SelectField'
+import { useAppDispatch } from 'app/hooks'
+import { createCategoryProperty } from './redux'
+import useNotify from 'hooks/useNotify'
+import useLanguage from 'hooks/useLanguage'
 
 export const choiceOptions: IOptions[] = [
   {
@@ -51,10 +55,13 @@ export const PropertyForm = ({
   } = useForm({ resolver: yupResolver(propertySchema), defaultValues })
 
   const { width } = useWeb()
+  const { notify } = useNotify()
+  const { language } = useLanguage()
   const [choice, setChoice] = useState('SINGLE')
   const [isRequire, setIsRequire] = useState(false)
   const choiceValue = watch('choice')
   const isRequireValue = watch('isRequire')
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     const selectedOption = requireOptions.find(
@@ -85,8 +92,8 @@ export const PropertyForm = ({
   }
 
   const submit = (data) => {
-    // TODO: submit property
-    console.log(data)
+    if (!dialog.categoryId) return notify(language['MSG_NO_CATEGORY'], 'error')
+    dispatch(createCategoryProperty({ body: { ...data, category: dialog.categoryId } }))
   }
   
   return (
@@ -111,7 +118,7 @@ export const PropertyForm = ({
                         `,
         }}
       >
-        <div style={{ gridArea: 'property' }}>
+        <div style={{ gridArea: 'property', marginBottom: '20px' }}>
           <LocaleField
             name='name'
             err={errors?.name}

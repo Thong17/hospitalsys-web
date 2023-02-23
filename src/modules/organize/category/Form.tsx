@@ -28,10 +28,14 @@ import { CustomOptionContainer } from 'styles/container'
 import AddRoundedIcon from '@mui/icons-material/AddRounded'
 import RadioButtonCheckedRoundedIcon from '@mui/icons-material/RadioButtonCheckedRounded'
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded'
-import { DeleteButton, UpdateButton } from 'components/shared/table/ActionButton'
+import {
+  DeleteButton,
+  UpdateButton,
+} from 'components/shared/table/ActionButton'
 import { TextEllipsis } from 'components/shared/TextEllipsis'
-import { useAppSelector } from 'app/hooks'
-import { selectCategory } from './redux'
+import { useAppDispatch, useAppSelector } from 'app/hooks'
+import { createCategory, selectCategory, updateCategory } from './redux'
+import useNotify from 'hooks/useNotify'
 
 const statusOption = [
   { label: 'Enabled', value: true },
@@ -51,6 +55,8 @@ const CategoryForm = ({ defaultValues, id }: any) => {
   } = useForm({ resolver: yupResolver(categorySchema), defaultValues })
   const { width, device } = useWeb()
   const confirm = useAlert()
+  const dispatch = useAppDispatch()
+  const { notify } = useNotify()
   const { language, lang } = useLanguage()
   const [status, setStatus] = useState(defaultValues?.status)
   const [iconPath, setIconPath] = useState<IImage>(defaultValues?.icon)
@@ -62,20 +68,19 @@ const CategoryForm = ({ defaultValues, id }: any) => {
   const [optionDialog, setOptionDialog] = useState({
     open: false,
     propertyId: null,
-    productId: id,
+    categoryId: id,
     optionId: null,
   })
   const [propertyDialog, setPropertyDialog] = useState({
     open: false,
     propertyId: null,
-    productId: id,
+    categoryId: id,
   })
 
   useEffect(() => {
     if (!category) return
     setProperties(category.properties)
   }, [category])
-  
 
   useEffect(() => {
     const selectedStatus = statusOption.find((key) => key.value === statusValue)
@@ -107,7 +112,21 @@ const CategoryForm = ({ defaultValues, id }: any) => {
   }
 
   const submit = async (data) => {
-    // TODO: submit category
+    id
+      ? dispatch(updateCategory({ id, body: data }))
+        .unwrap()
+        .then(data => {
+          notify(language['MSG_CATEGORY_UPDATE_SUCCESS'], 'success')
+          setPropertyDialog({ ...propertyDialog, categoryId: data.data.data?._id })
+        })
+        .catch(err => notify(language[err?.message], 'error'))
+      : dispatch(createCategory({ body: data }))
+        .unwrap()
+        .then(data => {
+          notify(language['MSG_CATEGORY_CREATE_SUCCESS'], 'success')
+          setPropertyDialog({ ...propertyDialog, categoryId: data.data.data?._id })
+        })
+        .catch(err => notify(language[err?.message], 'error'))
   }
 
   const handleDropProperty = (event: any) => {
@@ -127,7 +146,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
   const handleEditProperty = (propId) => {
     // TODO: edit property
   }
-  
+
   const handleToggleDefault = (optionId) => {
     // TODO: toggle active option
   }
@@ -256,11 +275,12 @@ const CategoryForm = ({ defaultValues, id }: any) => {
         </div>
         <div>
           <Button
+            disabled={!propertyDialog.categoryId}
             fullWidth
             style={{
               marginTop: 20,
-              backgroundColor: `${theme.color.info}22`,
-              color: theme.color.info,
+              backgroundColor: !propertyDialog.categoryId ? `${theme.text.secondary}22` : `${theme.color.info}22`,
+              color: !propertyDialog.categoryId ? theme.text.secondary : theme.color.info,
               boxShadow: theme.shadow.secondary,
             }}
             onClick={() => {
