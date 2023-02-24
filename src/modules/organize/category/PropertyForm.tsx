@@ -1,20 +1,17 @@
-import { CustomButton } from 'styles'
 import { AlertDialog } from 'components/shared/table/AlertDialog'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import {
-  DetailField,
-  LocaleField,
-} from 'components/shared/form'
+import { DetailField, LocaleField } from 'components/shared/form'
 import { propertySchema } from './schema'
 import useWeb from 'hooks/useWeb'
 import { useEffect, useState } from 'react'
 import { DialogTitle } from 'components/shared/DialogTitle'
 import { IOptions, SelectField } from 'components/shared/form/SelectField'
-import { useAppDispatch } from 'app/hooks'
-import { createCategoryProperty } from './redux'
+import { useAppDispatch, useAppSelector } from 'app/hooks'
+import { createCategoryProperty, getCategory, selectFormProperty, updateCategoryProperty } from './redux'
 import useNotify from 'hooks/useNotify'
 import useLanguage from 'hooks/useLanguage'
+import Button from 'components/shared/Button'
 
 export const choiceOptions: IOptions[] = [
   {
@@ -62,6 +59,7 @@ export const PropertyForm = ({
   const choiceValue = watch('choice')
   const isRequireValue = watch('isRequire')
   const dispatch = useAppDispatch()
+  const { status } = useAppSelector(selectFormProperty)
 
   useEffect(() => {
     const selectedOption = requireOptions.find(
@@ -93,14 +91,36 @@ export const PropertyForm = ({
 
   const submit = (data) => {
     if (!dialog.categoryId) return notify(language['MSG_NO_CATEGORY'], 'error')
-    dispatch(createCategoryProperty({ body: { ...data, category: dialog.categoryId } }))
+    dialog.propertyId
+      ? dispatch(
+          updateCategoryProperty({
+            id: dialog.propertyId,
+            body: { ...data, category: dialog.categoryId },
+          })
+        )
+          .unwrap()
+          .then((response) => {
+            if (response.code !== 'SUCCESS') return notify(response.msg, 'warning')
+            dispatch(getCategory({ id: dialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            notify(response.msg, 'success')
+          })
+          .catch(err => notify(err?.response?.msg, 'error'))
+      : dispatch(
+          createCategoryProperty({
+            body: { ...data, category: dialog.categoryId },
+          })
+        )
+          .unwrap()
+          .then((response) => {
+            if (response.code !== 'SUCCESS') return notify(response.msg, 'warning')
+            dispatch(getCategory({ id: dialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            notify(response.msg, 'success')
+          })
+          .catch(err => notify(err?.response?.msg, 'error'))
   }
-  
+
   return (
-    <AlertDialog
-      isOpen={dialog.open}
-      handleClose={handleCloseDialog}
-    >
+    <AlertDialog isOpen={dialog.open} handleClose={handleCloseDialog}>
       <DialogTitle title='Property Form' onClose={handleCloseDialog} />
       <form
         style={{
@@ -153,30 +173,32 @@ export const PropertyForm = ({
             {...register('description')}
           />
         </div>
-        <div style={{ gridArea: 'action', display: 'flex', justifyContent: 'end' }}>
-          <CustomButton
-            styled={theme}
+        <div
+          style={{ gridArea: 'action', display: 'flex', justifyContent: 'end' }}
+        >
+          <Button
             onClick={handleCloseDialog}
-            style={{ 
+            style={{
               backgroundColor: `${theme.color.error}22`,
-              color: theme.color.error 
+              color: theme.color.error,
             }}
           >
             Cancel
-          </CustomButton>
-          <CustomButton
+          </Button>
+          <Button
+            disabled={status === 'LOADING'}
+            loading={status === 'LOADING'}
             type='submit'
             style={{
               marginLeft: 10,
               backgroundColor: `${theme.color.info}22`,
               color: theme.color.info,
             }}
-            styled={theme}
             onClick={handleSubmit(submit)}
             autoFocus
           >
-            { dialog.propertyId ? 'Update' : 'Create' }
-          </CustomButton>
+            {dialog.propertyId ? 'Update' : 'Create'}
+          </Button>
         </div>
       </form>
     </AlertDialog>

@@ -27,6 +27,7 @@ export const initState: ICategory = {
 export interface CategoryState {
   list: IBody<any[]>
   detail: IBody<ICategory>
+  form: Omit<IBody<any>, 'data'>
 }
 
 export const initialState: CategoryState = {
@@ -36,6 +37,9 @@ export const initialState: CategoryState = {
   },
   detail: {
     data: initState,
+    status: 'INIT',
+  },
+  form: {
     status: 'INIT',
   }
 }
@@ -52,4 +56,13 @@ export const initOption = {
   currency: 'USD',
   price: 0,
   description: '',
+}
+
+export const mapPropertyBody = (body) => {
+  return {
+    name: body.name,
+    description: body.description,
+    isRequire: body?.isRequire,
+    choice: body?.choice
+  }
 }

@@ -12,20 +12,18 @@ const Header = () => {
 
 export const UpdateCategory = () => {
   const dispatch = useAppDispatch()
-  const { data: defaultValues, status } = useAppSelector(selectCategory)
+  const { data: defaultValues } = useAppSelector(selectCategory)
   const { id } = useParams()
   
   useEffect(() => {
     if (id) {
-      dispatch(getCategory({ id, fields: ['name', 'icon', 'status', 'description'] }))
+      dispatch(getCategory({ id, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
     }
   }, [dispatch, id])
   
   return (
     <Container header={<Header />}>
-      {
-        status === 'SUCCESS' && <CategoryForm id={id} defaultValues={defaultValues} />
-      }
+      <CategoryForm id={id} defaultValues={defaultValues} />
     </Container>
   )
 }

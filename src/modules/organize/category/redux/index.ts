@@ -41,7 +41,7 @@ export const createCategory = createAsyncThunk(
       body: body
     })
     
-    return response
+    return response.data
   }
 )
 
@@ -54,7 +54,7 @@ export const updateCategory = createAsyncThunk(
       body: body
     })
     
-    return response
+    return response.data
   }
 )
 
@@ -67,7 +67,20 @@ export const createCategoryProperty = createAsyncThunk(
       body
     })
     
-    return response
+    return response.data
+  }
+)
+
+export const updateCategoryProperty = createAsyncThunk(
+  'categoryProperty/update',
+  async ({ id, body }: { id: string, body: any }) => {
+    const response = await Axios({
+      method: 'PUT',
+      url: `/organize/category/property/update/${id}`,
+      body
+    })
+    
+    return response.data
   }
 )
 
@@ -80,7 +93,7 @@ export const createCategoryOption = createAsyncThunk(
       body: body
     })
     
-    return response
+    return response.data
   }
 )
 
@@ -114,10 +127,33 @@ export const categorySlice = createSlice({
         state.detail.status = 'SUCCESS'
         state.detail.data = action.payload.data
       })
+
+      // Update Property
+      .addCase(updateCategoryProperty.pending, (state) => {
+        state.form.status = 'LOADING'
+      })
+      .addCase(updateCategoryProperty.rejected, (state) => {
+        state.form.status = 'FAILED'
+      })
+      .addCase(updateCategoryProperty.fulfilled, (state) => {
+        state.form.status = 'SUCCESS'
+      })
+
+      // Create Property
+      .addCase(createCategoryProperty.pending, (state) => {
+        state.form.status = 'LOADING'
+      })
+      .addCase(createCategoryProperty.rejected, (state) => {
+        state.form.status = 'FAILED'
+      })
+      .addCase(createCategoryProperty.fulfilled, (state) => {
+        state.form.status = 'SUCCESS'
+      })
   },
 })
 
 export const selectCategory = (state: RootState) => state.category.detail
 export const selectListCategory = (state: RootState) => state.category.list
+export const selectFormProperty = (state: RootState) => state.category.form
 
 export default categorySlice.reducer

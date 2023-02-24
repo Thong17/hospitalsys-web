@@ -16,7 +16,7 @@ import useTheme from 'hooks/useTheme'
 import { useNavigate } from 'react-router-dom'
 import { PropertyForm } from './PropertyForm'
 import { OptionForm } from './OptionForm'
-import { initOption, initProperty } from './redux/constant'
+import { initOption, initProperty, mapPropertyBody } from './redux/constant'
 import useLanguage from 'hooks/useLanguage'
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd'
 import { Section } from 'components/shared/Section'
@@ -78,9 +78,9 @@ const CategoryForm = ({ defaultValues, id }: any) => {
   })
 
   useEffect(() => {
-    if (!category) return
+    if (!category?.properties) return
     setProperties(category.properties)
-  }, [category])
+  }, [category?.properties])
 
   useEffect(() => {
     const selectedStatus = statusOption.find((key) => key.value === statusValue)
@@ -143,8 +143,14 @@ const CategoryForm = ({ defaultValues, id }: any) => {
     // TODO: reorder property
   }
 
-  const handleEditProperty = (propId) => {
-    // TODO: edit property
+  const handleEditProperty = (prop) => {
+    if (!prop) return
+    setPropertyValue(mapPropertyBody(prop))
+    setPropertyDialog({
+      ...propertyDialog,
+      propertyId: prop._id,
+      open: true,
+    })
   }
 
   const handleToggleDefault = (optionId) => {
@@ -342,7 +348,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
                                   <MenuItem
                                     component='div'
                                     onClick={() =>
-                                      handleEditProperty(property?._id)
+                                      handleEditProperty(property)
                                     }
                                   >
                                     {language['EDIT']}
