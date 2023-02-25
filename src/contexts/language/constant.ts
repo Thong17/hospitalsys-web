@@ -139,6 +139,7 @@ export const languages = {
     HOMEPAGE_TITLE: 'Welcome to Hospital Management System',
     HOMEPAGE_DESCRIPTION: 'We develop this system for managing hospital process.',
     // Form
+    BROWSE: 'Browse',
     LOGIN: 'Login',
     REGISTER: 'Register',
     FROM: 'From',
@@ -217,12 +218,18 @@ export const languages = {
     TOTAL_PENALTY: 'Total\u00a0Penalty',
     DEPOSIT_LOAN: 'Deposit\u00a0Balance',
     GRAND_TOTAL: 'Grand\u00a0Total',
-    // Web Message Category
+    // MODULE: Category
+    PROPERTY_FORM: 'Property\u00a0Form',
+    OPTION_FORM: 'Option\u00a0Form',
+    PROPERTY: 'Property',
+    CHOICE: 'Choice',
+    OPTION: 'Option',
+
     'TITLE:DELETE_OPTION': 'Are you sure you want to delete this option?',
     'DESCRIPTION:DELETE_OPTION': 'Delete option description.',
     'TITLE:DELETE_PROPERTY': 'Are you sure you want to delete this property?',
     'DESCRIPTION:DELETE_PROPERTY': 'Delete property description.',
-    // Api Message Category
+
     'SUCCESS:CATEGORY_CREATED': 'Category has been created successfully.',
     'SUCCESS:CATEGORY_UPDATED': 'Category has been updated successfully.',
     'SUCCESS:CATEGORY_TOGGLED': 'Category has been updated successfully.',
@@ -237,7 +244,7 @@ export const languages = {
     'SUCCESS:OPTION_REMOVED': 'Option has been removed successfully.',
     'SUCCESS:CATEGORY_IMPORTED': 'Category has been imported successfully.',
     'SUCCESS:CATEGORY_INSERTED': 'Category has been inserted successfully.',
-    
+    'ERROR:NO_CATEGORY': 'No category!',
   },
   Khmer: {
     TEST: 'សាកល្បង',
@@ -378,6 +385,7 @@ export const languages = {
     HOMEPAGE_TITLE: 'សូមស្វាគមន៍មកកាន់ប្រព័ន្ធគ្រប់គ្រង Hospital',
     HOMEPAGE_DESCRIPTION: 'យើងបង្កើត និងរចនាកម្មវិធីគេហទំព័រដែលអាចទុកចិត្តបាន និងដំណើរការខ្ពស់សម្រាប់អាជីវកម្មរបស់អ្នក ជាមួយនឹងមូលដ្ឋានចំណុចប្រទាក់អ្នកប្រើទំនើបតាមតម្រូវការរបស់អ្នក។',
     // Form
+    BROWSE: 'រុករក',
     LOGIN: 'ចូល',
     REGISTER: 'ចុះឈ្មោះ',
     FROM: 'ចាប់ផ្តើម',
@@ -456,12 +464,18 @@ export const languages = {
     TOTAL_PENALTY: 'ពិន័យសរុប',
     DEPOSIT_LOAN: 'ដាក់ប្រាក់ដើម',
     GRAND_TOTAL: 'តម្លៃ​សរុប',
-    // Web Message Category
+    // MODULE: Category
+    PROPERTY_FORM: 'Property\u00a0Form',
+    OPTION_FORM: 'Option\u00a0Form',
+    PROPERTY: 'Property',
+    CHOICE: 'Choice',
+    OPTION: 'Option',
+
     'TITLE:DELETE_OPTION': 'Are you sure you want to delete this option?',
     'DESCRIPTION:DELETE_OPTION': 'Delete option description.',
     'TITLE:DELETE_PROPERTY': 'Are you sure you want to delete this property?',
     'DESCRIPTION:DELETE_PROPERTY': 'Delete property description.',
-    // Api Message Category
+
     'SUCCESS:CATEGORY_CREATED': 'Category has been created successfully.',
     'SUCCESS:CATEGORY_UPDATED': 'Category has been updated successfully.',
     'SUCCESS:CATEGORY_TOGGLED': 'Category has been updated successfully.',
@@ -476,6 +490,6 @@ export const languages = {
     'SUCCESS:OPTION_REMOVED': 'Option has been removed successfully.',
     'SUCCESS:CATEGORY_IMPORTED': 'Category has been imported successfully.',
     'SUCCESS:CATEGORY_INSERTED': 'Category has been inserted successfully.',
-
+    'ERROR:NO_CATEGORY': 'No category!',
   }
 }

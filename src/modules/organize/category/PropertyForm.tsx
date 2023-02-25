@@ -122,7 +122,7 @@ export const PropertyForm = ({
 
   return (
     <AlertDialog isOpen={dialog.open} handleClose={handleCloseDialog}>
-      <DialogTitle title='Property Form' onClose={handleCloseDialog} />
+      <DialogTitle title={language['PROPERTY_FORM']} onClose={handleCloseDialog} />
       <form
         style={{
           fontFamily: theme.font.family,
@@ -143,7 +143,7 @@ export const PropertyForm = ({
           <LocaleField
             name='name'
             err={errors?.name}
-            describe='Property'
+            describe={language['PROPERTY']}
             defaultValue={getValues('name')}
             onChange={handleLocaleChange}
           />
@@ -152,7 +152,7 @@ export const PropertyForm = ({
           <SelectField
             value={choice}
             options={choiceOptions}
-            label='Choice'
+            label={language['CHOICE']}
             err={errors?.choice?.message}
             {...register('choice')}
           />
@@ -161,7 +161,7 @@ export const PropertyForm = ({
           <SelectField
             value={isRequire}
             options={requireOptions}
-            label='Option'
+            label={language['OPTION']}
             err={errors?.isRequire?.message}
             {...register('isRequire')}
           />
@@ -169,7 +169,7 @@ export const PropertyForm = ({
         <div style={{ gridArea: 'description' }}>
           <DetailField
             type='text'
-            label='Description'
+            label={language['DESCRIPTION']}
             style={{ height: 70 }}
             {...register('description')}
           />
@@ -184,7 +184,7 @@ export const PropertyForm = ({
               color: theme.color.error,
             }}
           >
-            Cancel
+            {language['CANCEL']}
           </Button>
           <Button
             disabled={status === 'LOADING'}
@@ -198,7 +198,7 @@ export const PropertyForm = ({
             onClick={handleSubmit(submit)}
             autoFocus
           >
-            {dialog.propertyId ? 'Update' : 'Create'}
+            {dialog.propertyId ? language['UPDATE'] : language['CREATE']}
           </Button>
         </div>
       </form>

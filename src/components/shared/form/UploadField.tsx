@@ -12,6 +12,7 @@ import Carousel from 'react-spring-3d-carousel'
 import PhotoCameraRoundedIcon from '@mui/icons-material/PhotoCameraRounded'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { IconButton } from '@mui/material'
+import useLanguage from 'hooks/useLanguage'
 
 export interface IImage {
   filename: string
@@ -46,6 +47,7 @@ const Input: ForwardRefRenderFunction<HTMLInputElement, IUploadField> = (
   ref
 ) => {
   const { theme } = useTheme()
+  const { language } = useLanguage()
   const { device } = useWeb()
   const [toSlide, setToSlide] = useState(0)
   const [active, setActive] = useState(selected)
@@ -129,7 +131,7 @@ const Input: ForwardRefRenderFunction<HTMLInputElement, IUploadField> = (
           className={`input ${err && 'input-error'}`}
           style={{ height: height ? height : 35 }}
         >
-          <span>Browse</span>
+          <span>{language['BROWSE']}</span>
         </label>
       )}
       <input ref={ref} type='file' name={name} id={name} {...props} />

@@ -128,7 +128,7 @@ export const OptionForm = ({
 
   return (
     <AlertDialog isOpen={dialog.open} handleClose={handleCloseDialog}>
-      <DialogTitle title='Option Form' onClose={handleCloseDialog} />
+      <DialogTitle title={language['OPTION_FORM']} onClose={handleCloseDialog} />
       <form
         style={{
           fontFamily: theme.font.family,
@@ -150,7 +150,7 @@ export const OptionForm = ({
           <LocaleField
             name='name'
             err={errors?.name}
-            describe='Option'
+            describe={language['OPTION']}
             defaultValue={getValues('name')}
             onChange={handleLocaleChange}
           />
@@ -159,7 +159,7 @@ export const OptionForm = ({
           <TextField
             type='number'
             step='any'
-            label='Price'
+            label={language['PRICE']}
             err={errors?.price?.message}
             {...register('price')}
           />
@@ -168,7 +168,7 @@ export const OptionForm = ({
           <SelectField
             value={currency}
             options={currencyOptions}
-            label='Currency'
+            label={language['CURRENCY']}
             err={errors?.currency?.message}
             {...register('currency')}
           />
@@ -178,7 +178,7 @@ export const OptionForm = ({
             height={130}
             images={imagePath && [imagePath]}
             name='profile'
-            label='Profile'
+            label={language['PROFILE']}
             accept='image/png, image/jpeg'
             err={errors?.profile?.message}
             selected={getValues('profile')}
@@ -189,7 +189,7 @@ export const OptionForm = ({
         <div style={{ gridArea: 'description' }}>
           <DetailField
             type='text'
-            label='Description'
+            label={language['DESCRIPTION']}
             style={{ height: 70 }}
             {...register('description')}
           />
@@ -204,7 +204,7 @@ export const OptionForm = ({
               color: theme.color.error,
             }}
           >
-            Cancel
+            {language['CANCEL']}
           </Button>
           <Button
             disabled={status === 'LOADING'}
@@ -218,7 +218,7 @@ export const OptionForm = ({
             onClick={handleSubmit(submit)}
             autoFocus
           >
-            {dialog.optionId ? 'Update' : 'Create'}
+            {dialog.optionId ? language['UPDATE'] : language['CREATE']}
           </Button>
         </div>
       </form>
