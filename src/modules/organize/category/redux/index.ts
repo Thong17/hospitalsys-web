@@ -111,11 +111,48 @@ export const reorderCategoryProperty = createAsyncThunk(
 
 export const createCategoryOption = createAsyncThunk(
   'categoryOption/create',
-  async ({id, body}: { id: string, body: any }) => {
+  async ({ body }: { body: any }) => {
     const response = await Axios({
       method: 'POST',
-      url: `/organize/category/${id}/option`,
+      url: `/organize/category/option/create`,
       body: body
+    })
+    
+    return response.data
+  }
+)
+
+export const updateCategoryOption = createAsyncThunk(
+  'categoryOption/update',
+  async ({ id, body }: { id: string, body: any }) => {
+    const response = await Axios({
+      method: 'PUT',
+      url: `/organize/category/option/update/${id}`,
+      body: body
+    })
+    
+    return response.data
+  }
+)
+
+export const removeCategoryOption = createAsyncThunk(
+  'categoryOption/remove',
+  async ({ id }: { id: any }) => {
+    const response = await Axios({
+      method: 'DELETE',
+      url: `/organize/category/option/remove/${id}`,
+    })
+    
+    return response.data
+  }
+)
+
+export const toggleCategoryOption = createAsyncThunk(
+  'categoryOption/toggle',
+  async ({ id }: { id: string }) => {
+    const response = await Axios({
+      method: 'PUT',
+      url: `/organize/category/option/toggle/${id}`,
     })
     
     return response.data
@@ -174,11 +211,33 @@ export const categorySlice = createSlice({
       .addCase(createCategoryProperty.fulfilled, (state) => {
         state.form.status = 'SUCCESS'
       })
+
+      // Create Option
+      .addCase(createCategoryOption.pending, (state) => {
+        state.form.status = 'LOADING'
+      })
+      .addCase(createCategoryOption.rejected, (state) => {
+        state.form.status = 'FAILED'
+      })
+      .addCase(createCategoryOption.fulfilled, (state) => {
+        state.form.status = 'SUCCESS'
+      })
+
+      // Update Option
+      .addCase(updateCategoryOption.pending, (state) => {
+        state.form.status = 'LOADING'
+      })
+      .addCase(updateCategoryOption.rejected, (state) => {
+        state.form.status = 'FAILED'
+      })
+      .addCase(updateCategoryOption.fulfilled, (state) => {
+        state.form.status = 'SUCCESS'
+      })
   },
 })
 
 export const selectCategory = (state: RootState) => state.category.detail
 export const selectListCategory = (state: RootState) => state.category.list
-export const selectFormProperty = (state: RootState) => state.category.form
+export const selectFormCategory = (state: RootState) => state.category.form
 
 export default categorySlice.reducer

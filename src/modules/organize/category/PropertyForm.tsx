@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { DialogTitle } from 'components/shared/DialogTitle'
 import { IOptions, SelectField } from 'components/shared/form/SelectField'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
-import { createCategoryProperty, getCategory, selectFormProperty, updateCategoryProperty } from './redux'
+import { createCategoryProperty, getCategory, selectFormCategory, updateCategoryProperty } from './redux'
 import useNotify from 'hooks/useNotify'
 import useLanguage from 'hooks/useLanguage'
 import Button from 'components/shared/Button'
@@ -59,7 +59,7 @@ export const PropertyForm = ({
   const choiceValue = watch('choice')
   const isRequireValue = watch('isRequire')
   const dispatch = useAppDispatch()
-  const { status } = useAppSelector(selectFormProperty)
+  const { status } = useAppSelector(selectFormCategory)
 
   useEffect(() => {
     const selectedOption = requireOptions.find(

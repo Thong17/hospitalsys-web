@@ -16,7 +16,7 @@ import useTheme from 'hooks/useTheme'
 import { useNavigate } from 'react-router-dom'
 import { PropertyForm } from './PropertyForm'
 import { OptionForm } from './OptionForm'
-import { initOption, initProperty, mapPropertyBody } from './redux/constant'
+import { initOption, initProperty, mapOptionBody, mapPropertyBody } from './redux/constant'
 import useLanguage from 'hooks/useLanguage'
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd'
 import { Section } from 'components/shared/Section'
@@ -34,7 +34,7 @@ import {
 } from 'components/shared/table/ActionButton'
 import { TextEllipsis } from 'components/shared/TextEllipsis'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
-import { createCategory, selectCategory, updateCategory, reorderCategoryProperty, removeCategoryProperty, getCategory } from './redux'
+import { getCategory, createCategory, selectCategory, updateCategory, reorderCategoryProperty, removeCategoryProperty, toggleCategoryOption, removeCategoryOption } from './redux'
 import useNotify from 'hooks/useNotify'
 
 const statusOption = [
@@ -159,11 +159,24 @@ const CategoryForm = ({ defaultValues, id }: any) => {
   }
 
   const handleToggleDefault = (optionId) => {
-    // TODO: toggle active option
+    if (!optionId) return
+    dispatch(toggleCategoryOption({ id: optionId }))
+      .unwrap()
+      .then((response) => {
+        dispatch(getCategory({ id: optionDialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+        notify(language[response?.msg], 'success')
+      })
+      .catch(err => notify(language[err?.message], 'error'))
   }
 
-  const handleEditOption = (oid, propId) => {
-    // TODO: edit option
+  const handleEditOption = (option, propertyId) => {
+    setOptionValue(mapOptionBody(option))
+    setOptionDialog({
+      ...optionDialog,
+      propertyId,
+      optionId: option._id,
+      open: true,
+    })
   }
 
   const handleDeleteOption = (id) => {
@@ -173,7 +186,13 @@ const CategoryForm = ({ defaultValues, id }: any) => {
       variant: 'error',
     })
       .then(() => {
-        // TODO: delete option
+        dispatch(removeCategoryOption({ id }))
+          .unwrap()
+          .then((response) => {
+            dispatch(getCategory({ id: optionDialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            notify(language[response?.msg], 'success')
+          })
+          .catch(err => notify(language[err?.message], 'error'))
       })
       .catch(() => null)
   }
@@ -429,7 +448,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
                                             style={{ margin: 0 }}
                                             onClick={() =>
                                               handleEditOption(
-                                                option._id,
+                                                option,
                                                 property._id
                                               )
                                             }

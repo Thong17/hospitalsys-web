@@ -1,4 +1,3 @@
-import { CustomButton } from 'styles'
 import { AlertDialog } from 'components/shared/table/AlertDialog'
 import { optionSchema } from './schema'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -17,6 +16,10 @@ import { useEffect, useState } from 'react'
 import { IImage } from 'components/shared/form/UploadField'
 import useWeb from 'hooks/useWeb'
 import { DialogTitle } from 'components/shared/DialogTitle'
+import { useAppDispatch, useAppSelector } from 'app/hooks'
+import { createCategoryOption, getCategory, selectFormCategory, updateCategoryOption } from './redux'
+import useLanguage from 'hooks/useLanguage'
+import Button from 'components/shared/Button'
 
 export const OptionForm = ({
   dialog,
@@ -33,8 +36,12 @@ export const OptionForm = ({
     getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(optionSchema), defaultValues })
+  const dispatch = useAppDispatch()
   const { loadify } = useNotify()
   const { width } = useWeb()
+  const { notify } = useNotify()
+  const { language } = useLanguage()
+  const { status } = useAppSelector(selectFormCategory)
   const [imagePath, setImagePath] = useState<IImage | undefined>(
     defaultValues?.imagePath
   )
@@ -94,8 +101,28 @@ export const OptionForm = ({
   }
 
   const submit = (data) => {
-    // TODO: submit option
-    console.log(data)
+    const body = {
+      ...data,
+      category: dialog.categoryId,
+      property: dialog.propertyId,
+    }
+    dialog.optionId
+      ? dispatch(updateCategoryOption({ id: dialog.optionId, body }))
+          .unwrap()
+          .then((response) => {
+            if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
+            dispatch(getCategory({ id: dialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            notify(language[response?.msg], 'success')
+          })
+          .catch(err => notify(err?.response?.msg, 'error'))
+      : dispatch(createCategoryOption({ body }))
+          .unwrap()
+          .then((response) => {
+            if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
+            dispatch(getCategory({ id: dialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            notify(language[response?.msg], 'success')
+          })
+          .catch(err => notify(err?.response?.msg, 'error'))
   }
 
   return (
@@ -169,8 +196,7 @@ export const OptionForm = ({
         <div
           style={{ gridArea: 'action', display: 'flex', justifyContent: 'end' }}
         >
-          <CustomButton
-            styled={theme}
+          <Button
             onClick={handleCloseDialog}
             style={{
               backgroundColor: `${theme.color.error}22`,
@@ -178,20 +204,21 @@ export const OptionForm = ({
             }}
           >
             Cancel
-          </CustomButton>
-          <CustomButton
+          </Button>
+          <Button
+            disabled={status === 'LOADING'}
+            loading={status === 'LOADING'}
             type='submit'
             style={{
               marginLeft: 10,
               backgroundColor: `${theme.color.info}22`,
               color: theme.color.info,
             }}
-            styled={theme}
             onClick={handleSubmit(submit)}
             autoFocus
           >
             {dialog.optionId ? 'Update' : 'Create'}
-          </CustomButton>
+          </Button>
         </div>
       </form>
     </AlertDialog>
