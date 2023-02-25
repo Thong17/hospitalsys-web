@@ -5,10 +5,12 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
+import { DetailField } from 'components/shared/form'
 
 export interface IAlertProps {
   title?: string
   description?: string
+  reason?: boolean
   variant?: 'info' | 'warning' | 'error'
 }
 
@@ -16,9 +18,10 @@ export const AlertContext = createContext<(options: IAlertProps) => Promise<void
 
 const AlertProvider = ({ children }) => {
   const [dialog, setDialog] = useState<IAlertProps & { open: boolean }>({ open: false })
+  const reasonRef = useRef(document.createElement('textarea'))
 
   const awaitingPromiseRef = useRef<{
-    resolve: () => void
+    resolve: (data) => void
     reject: () => void
   }>()
 
@@ -31,13 +34,13 @@ const AlertProvider = ({ children }) => {
 
   const confirmDialog = () => {
     if (awaitingPromiseRef.current) {
-      awaitingPromiseRef.current.resolve()
+      awaitingPromiseRef.current.resolve({ reason: reasonRef.current?.value })
     }
     setDialog({ ...dialog, open: false })
   }
 
   const confirm = (props: IAlertProps) => {
-    setDialog({ ...props, open:true })
+    setDialog({ ...props, open: true })
 
     return new Promise<void>((resolve, reject) => {
       awaitingPromiseRef.current = { resolve, reject }
@@ -58,6 +61,14 @@ const AlertProvider = ({ children }) => {
           <DialogContentText id='alert-dialog-description'>
             {dialog?.description}
           </DialogContentText>
+          {dialog?.reason && <div>
+            <DetailField
+              ref={reasonRef}
+              type='text'
+              placeholder='Reason'
+              style={{ height: 70, minWidth: '370px', color: '#111', borderColor: '#00000022' }}
+            />
+          </div>}
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog}>Cancel</Button>

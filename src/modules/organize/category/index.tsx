@@ -3,12 +3,11 @@ import { useEffect, useState } from 'react'
 import { StickyTable } from 'components/shared/table/StickyTable'
 import { useNavigate } from 'react-router'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
-import { getListCategory, selectListCategory } from './redux'
+import { getListCategory, removeCategory, selectListCategory } from './redux'
 import useLanguage from 'hooks/useLanguage'
 import useWeb from 'hooks/useWeb'
 import useAuth from 'hooks/useAuth'
 import useNotify from 'hooks/useNotify'
-import { DeleteDialog } from 'components/shared/table/DeleteDialog'
 import Axios from 'constants/functions/Axios'
 import useTheme from 'hooks/useTheme'
 import {
@@ -36,9 +35,8 @@ export const Categories = () => {
   const { device } = useWeb()
   const { user } = useAuth()
   const { theme } = useTheme()
-  const { loadify, notify } = useNotify()
+  const { notify, loadify } = useNotify()
   const [rowData, setRowData] = useState<Data[]>([])
-  const [dialog, setDialog] = useState({ open: false, id: null })
   const navigate = useNavigate()
   const [queryParams, setQueryParams] = useSearchParams()
   const [importDialog, setImportDialog] = useState({ open: false, data: [] })
@@ -135,22 +133,30 @@ export const Categories = () => {
     })
   }
 
-  const handleConfirm = (id) => {
-    const response = Axios({
-      method: 'DELETE',
-      url: `/organize/category/disable/${id}`,
-    })
-    loadify(response)
-    response.then(() => dispatch(getListCategory({})))
-
-    setDialog({ open: false, id: null })
-  }
-
   useEffect(() => {
     dispatch(getListCategory({ query: queryParams }))
   }, [dispatch, queryParams])
 
   useEffect(() => {
+    const handleDelete = (id) => {
+      confirm({
+        title: 'TITLE:REMOVE_CATEGORY',
+        description:
+          'DESCRIPTION:REMOVE_CATEGORY',
+        variant: 'error',
+        reason: true
+      })
+        .then((data) => {
+          dispatch(removeCategory({ id, body: data }))
+            .unwrap()
+            .then((response) => {
+              dispatch(getListCategory({}))
+              notify(response?.msg, 'success')
+            })
+            .catch(err => notify(err?.message, 'error'))
+        })
+        .catch(() => null)
+    }
     const listCategories = categories.map((category: any) => {
       return createData(
         category._id,
@@ -162,11 +168,12 @@ export const Categories = () => {
         user?.privilege,
         device,
         navigate,
-        setDialog
+        handleDelete
       )
     })
     setRowData(listCategories)
-  }, [categories, lang, user, device, theme, navigate])
+    // eslint-disable-next-line
+  }, [categories, lang, user])
 
   const handleToggleStatus = (id) => {
     confirm({
@@ -180,12 +187,10 @@ export const Categories = () => {
           method: 'PUT',
           url: `/organize/category/toggleStatus/${id}`,
         })
-          .then(() => {
-            dispatch(getListCategory({ query: queryParams }))
-          })
+          .then(() => dispatch(getListCategory({ query: queryParams })))
           .catch((err) => notify(err?.response?.data?.msg, 'error'))
       })
-      .catch(() => {})
+      .catch(() => null)
   }
 
   return (
@@ -225,12 +230,6 @@ export const Categories = () => {
           </CustomButton>
         </DialogActions>
       </AlertDialog>
-      <DeleteDialog
-        id={dialog.id}
-        isOpen={dialog.open}
-        handleConfirm={handleConfirm}
-        handleClose={() => setDialog({ open: false, id: null })}
-      />
       <StickyTable
         columns={columnData}
         rows={rowData}

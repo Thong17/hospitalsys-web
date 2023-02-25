@@ -45,7 +45,7 @@ export const createData = (
   privilege: any,
   device: DeviceOptions,
   navigate: Function,
-  setDialog: Function
+  onDelete: Function
 ): Data => {
   let action = (
     <div style={{ float: "right" }}>
@@ -60,7 +60,7 @@ export const createData = (
             </MenuItem>
             <MenuItem
               component='div'
-              onClick={() => setDialog({ open: true, id })}
+              onClick={() => onDelete(id)}
             >
               Delete
             </MenuItem>
@@ -80,7 +80,7 @@ export const createData = (
             />
           )}
           {privilege?.category?.delete && (
-            <DeleteButton onClick={() => setDialog({ open: true, id })} />
+            <DeleteButton onClick={() => onDelete(id)} />
           )}
         </>
       )}
