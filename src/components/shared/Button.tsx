@@ -17,7 +17,7 @@ const ButtonRef: ForwardRefRenderFunction<HTMLButtonElement, IButton> = ({ child
   
   return (
     <CustomButton styled={theme} {...prop} ref={ref}>
-      <Box sx={{ opacity: loading ? '0' : '1' }}>{children}</Box>
+      <Box sx={{ opacity: loading ? '0' : '1', display: 'grid', placeItems: 'center' }}>{children}</Box>
       {loading && <Loading />}
     </CustomButton>
   )
