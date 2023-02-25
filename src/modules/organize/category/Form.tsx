@@ -403,7 +403,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
                               style={{
                                 position: 'relative',
                                 boxSizing: 'border-box',
-                                paddingTop: 20,
+                                paddingTop: 30,
                               }}
                               boxShadow={theme.shadow.secondary}
                               describe={
