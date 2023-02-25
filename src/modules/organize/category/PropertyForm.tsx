@@ -139,7 +139,7 @@ export const PropertyForm = ({
                         `,
         }}
       >
-        <div style={{ gridArea: 'property', marginBottom: '20px' }}>
+        <div style={{ gridArea: 'property' }}>
           <LocaleField
             name='name'
             err={errors?.name}

@@ -93,10 +93,16 @@ const CategoryForm = ({ defaultValues, id }: any) => {
 
   const getCategoryDetail = (id) => {
     if (!id) return
-    dispatch(getCategory({ id, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+    dispatch(
+      getCategory({
+        id,
+        fields: ['name', 'icon', 'status', 'description', 'properties'],
+      })
+    )
       .unwrap()
       .then((response) => {
-        if (response.code !== 'SUCCESS' || !response?.data) return notify(language[response?.msg], 'error')
+        if (response.code !== 'SUCCESS' || !response?.data)
+          return notify(language[response?.msg], 'error')
         const { properties, ...rest } = response?.data
         setProperties(properties)
         reset(rest)
@@ -151,7 +157,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
             })
             setOptionDialog({
               ...optionDialog,
-              categoryId: id
+              categoryId: id,
             })
           })
           .catch((err) => notify(language[err?.message], 'error'))
@@ -168,7 +174,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
             })
             setOptionDialog({
               ...optionDialog,
-              categoryId: id
+              categoryId: id,
             })
           })
           .catch((err) => notify(language[err?.message], 'error'))
@@ -284,13 +290,11 @@ const CategoryForm = ({ defaultValues, id }: any) => {
                               `,
             }}
           >
-            <div
-              style={{ gridArea: 'category', marginTop: 20, marginBottom: 20 }}
-            >
+            <div style={{ gridArea: 'category' }}>
               <LocaleField
                 onChange={handleChangeCategory}
                 err={errors?.name}
-                describe='Category'
+                describe='Name'
                 name='name'
                 defaultValue={getValues('name')}
               />
