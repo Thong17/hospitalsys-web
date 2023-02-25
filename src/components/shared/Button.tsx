@@ -1,5 +1,5 @@
 import React, { forwardRef, ForwardRefRenderFunction } from 'react'
-import { ButtonProps } from '@mui/material'
+import { ButtonProps, Box } from '@mui/material'
 import { MUIStyledCommonProps } from '@mui/system'
 import useTheme from 'hooks/useTheme'
 import { CustomButton } from 'styles'
@@ -17,7 +17,7 @@ const ButtonRef: ForwardRefRenderFunction<HTMLButtonElement, IButton> = ({ child
   
   return (
     <CustomButton styled={theme} {...prop} ref={ref}>
-      {!loading && children}
+      <Box sx={{ opacity: loading ? '0' : '1' }}>{children}</Box>
       {loading && <Loading />}
     </CustomButton>
   )

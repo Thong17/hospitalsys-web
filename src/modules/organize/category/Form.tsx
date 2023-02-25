@@ -16,7 +16,12 @@ import useTheme from 'hooks/useTheme'
 import { useNavigate } from 'react-router-dom'
 import { PropertyForm } from './PropertyForm'
 import { OptionForm } from './OptionForm'
-import { initOption, initProperty, mapOptionBody, mapPropertyBody } from './redux/constant'
+import {
+  initOption,
+  initProperty,
+  mapOptionBody,
+  mapPropertyBody,
+} from './redux/constant'
 import useLanguage from 'hooks/useLanguage'
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd'
 import { Section } from 'components/shared/Section'
@@ -34,7 +39,16 @@ import {
 } from 'components/shared/table/ActionButton'
 import { TextEllipsis } from 'components/shared/TextEllipsis'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
-import { getCategory, createCategory, selectCategory, updateCategory, reorderCategoryProperty, removeCategoryProperty, toggleCategoryOption, removeCategoryOption } from './redux'
+import {
+  getCategory,
+  createCategory,
+  selectCategory,
+  updateCategory,
+  reorderCategoryProperty,
+  removeCategoryProperty,
+  toggleCategoryOption,
+  removeCategoryOption,
+} from './redux'
 import useNotify from 'hooks/useNotify'
 
 const statusOption = [
@@ -114,19 +128,25 @@ const CategoryForm = ({ defaultValues, id }: any) => {
   const submit = async (data) => {
     id
       ? dispatch(updateCategory({ id, body: data }))
-        .unwrap()
-        .then(response => {
-          notify(language[response?.msg], 'success')
-          setPropertyDialog({ ...propertyDialog, categoryId: response.data.data?._id })
-        })
-        .catch(err => notify(language[err?.message], 'error'))
+          .unwrap()
+          .then((response) => {
+            notify(language[response?.msg], 'success')
+            setPropertyDialog({
+              ...propertyDialog,
+              categoryId: response.data.data?._id,
+            })
+          })
+          .catch((err) => notify(language[err?.message], 'error'))
       : dispatch(createCategory({ body: data }))
-        .unwrap()
-        .then(response => {
-          notify(language[response?.msg], 'success')
-          setPropertyDialog({ ...propertyDialog, categoryId: response.data.data?._id })
-        })
-        .catch(err => notify(language[err?.message], 'error'))
+          .unwrap()
+          .then((response) => {
+            notify(language[response?.msg], 'success')
+            setPropertyDialog({
+              ...propertyDialog,
+              categoryId: response.data.data?._id,
+            })
+          })
+          .catch((err) => notify(language[err?.message], 'error'))
   }
 
   const handleDropProperty = (event: any) => {
@@ -145,7 +165,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
       .then((response) => {
         notify(language[response?.msg], 'success')
       })
-      .catch(err => notify(language[err?.message], 'error'))
+      .catch((err) => notify(language[err?.message], 'error'))
   }
 
   const handleEditProperty = (prop) => {
@@ -163,10 +183,15 @@ const CategoryForm = ({ defaultValues, id }: any) => {
     dispatch(toggleCategoryOption({ id: optionId }))
       .unwrap()
       .then((response) => {
-        dispatch(getCategory({ id: optionDialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+        dispatch(
+          getCategory({
+            id: optionDialog.categoryId,
+            fields: ['name', 'icon', 'status', 'description', 'properties'],
+          })
+        )
         notify(language[response?.msg], 'success')
       })
-      .catch(err => notify(language[err?.message], 'error'))
+      .catch((err) => notify(language[err?.message], 'error'))
   }
 
   const handleEditOption = (option, propertyId) => {
@@ -189,10 +214,15 @@ const CategoryForm = ({ defaultValues, id }: any) => {
         dispatch(removeCategoryOption({ id }))
           .unwrap()
           .then((response) => {
-            dispatch(getCategory({ id: optionDialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            dispatch(
+              getCategory({
+                id: optionDialog.categoryId,
+                fields: ['name', 'icon', 'status', 'description', 'properties'],
+              })
+            )
             notify(language[response?.msg], 'success')
           })
-          .catch(err => notify(language[err?.message], 'error'))
+          .catch((err) => notify(language[err?.message], 'error'))
       })
       .catch(() => null)
   }
@@ -207,10 +237,15 @@ const CategoryForm = ({ defaultValues, id }: any) => {
         dispatch(removeCategoryProperty({ id }))
           .unwrap()
           .then((response) => {
-            dispatch(getCategory({ id: propertyDialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            dispatch(
+              getCategory({
+                id: propertyDialog.categoryId,
+                fields: ['name', 'icon', 'status', 'description', 'properties'],
+              })
+            )
             notify(language[response?.msg], 'success')
           })
-          .catch(err => notify(language[err?.message], 'error'))
+          .catch((err) => notify(language[err?.message], 'error'))
       })
       .catch(() => null)
   }
@@ -225,86 +260,88 @@ const CategoryForm = ({ defaultValues, id }: any) => {
           gridGap: 20,
         }}
       >
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr',
-            gridColumnGap: 20,
-            gridTemplateAreas: `
+        <div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr 1fr',
+              gridColumnGap: 20,
+              gridTemplateAreas: `
                               'category category category'
                               'status icon icon'
                               'description description description'
                               'action action action'
                               `,
-          }}
-        >
-          <div
-            style={{ gridArea: 'category', marginTop: 20, marginBottom: 20 }}
-          >
-            <LocaleField
-              onChange={handleChangeCategory}
-              err={errors?.name}
-              describe='Category'
-              name='name'
-              defaultValue={getValues('name')}
-            />
-          </div>
-          <div style={{ gridArea: 'status' }}>
-            <SelectField
-              options={statusOption}
-              label='Status'
-              value={status}
-              err={errors?.status?.message}
-              {...register('status')}
-            />
-          </div>
-          <div style={{ gridArea: 'icon' }}>
-            <FileField
-              images={iconPath && [iconPath]}
-              selected={getValues('icon')?._id}
-              name='icon'
-              label='Icon'
-              accept='image/png, image/jpeg'
-              onChange={handleChangeFile}
-            />
-          </div>
-          <div style={{ gridArea: 'description' }}>
-            <DetailField
-              type='text'
-              label='Description'
-              style={{ height: 70 }}
-              {...register('description')}
-            />
-          </div>
-          <div
-            style={{
-              gridArea: 'action',
-              marginTop: 10,
-              display: 'flex',
-              justifyContent: 'end',
             }}
           >
-            <Button
-              variant='contained'
-              style={{
-                backgroundColor: `${theme.color.error}22`,
-                color: theme.color.error,
-              }}
-              onClick={() => navigate(-1)}
+            <div
+              style={{ gridArea: 'category', marginTop: 20, marginBottom: 20 }}
             >
-              Cancel
-            </Button>
-            <Button
-              type='submit'
-              variant='contained'
+              <LocaleField
+                onChange={handleChangeCategory}
+                err={errors?.name}
+                describe='Category'
+                name='name'
+                defaultValue={getValues('name')}
+              />
+            </div>
+            <div style={{ gridArea: 'status' }}>
+              <SelectField
+                options={statusOption}
+                label='Status'
+                value={status}
+                err={errors?.status?.message}
+                {...register('status')}
+              />
+            </div>
+            <div style={{ gridArea: 'icon' }}>
+              <FileField
+                images={iconPath && [iconPath]}
+                selected={getValues('icon')?._id}
+                name='icon'
+                label='Icon'
+                accept='image/png, image/jpeg'
+                onChange={handleChangeFile}
+              />
+            </div>
+            <div style={{ gridArea: 'description' }}>
+              <DetailField
+                type='text'
+                label='Description'
+                style={{ height: 70 }}
+                {...register('description')}
+              />
+            </div>
+            <div
               style={{
-                marginLeft: 10,
-                backgroundColor: `${theme.color.info}22`,
-                color: theme.color.info,
+                gridArea: 'action',
+                marginTop: 10,
+                display: 'flex',
+                justifyContent: 'end',
               }}
             >
-              {id ? 'Save' : 'Create'}
-            </Button>
+              <Button
+                variant='contained'
+                style={{
+                  backgroundColor: `${theme.color.error}22`,
+                  color: theme.color.error,
+                }}
+                onClick={() => navigate(-1)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type='submit'
+                variant='contained'
+                style={{
+                  marginLeft: 10,
+                  backgroundColor: `${theme.color.info}22`,
+                  color: theme.color.info,
+                }}
+              >
+                {id ? 'Save' : 'Create'}
+              </Button>
+            </div>
           </div>
         </div>
         <div>
@@ -313,8 +350,12 @@ const CategoryForm = ({ defaultValues, id }: any) => {
             fullWidth
             style={{
               marginTop: 20,
-              backgroundColor: !propertyDialog.categoryId ? `${theme.text.secondary}22` : `${theme.color.info}22`,
-              color: !propertyDialog.categoryId ? theme.text.secondary : theme.color.info,
+              backgroundColor: !propertyDialog.categoryId
+                ? `${theme.text.secondary}22`
+                : `${theme.color.info}22`,
+              color: !propertyDialog.categoryId
+                ? theme.text.secondary
+                : theme.color.info,
               boxShadow: theme.shadow.secondary,
             }}
             onClick={() => {
@@ -375,9 +416,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
                                 >
                                   <MenuItem
                                     component='div'
-                                    onClick={() =>
-                                      handleEditProperty(property)
-                                    }
+                                    onClick={() => handleEditProperty(property)}
                                   >
                                     {language['EDIT']}
                                   </MenuItem>
