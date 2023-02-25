@@ -361,10 +361,10 @@ const CategoryForm = ({ defaultValues, id }: any) => {
             style={{
               marginTop: 20,
               backgroundColor: !propertyDialog.categoryId
-                ? `${theme.text.secondary}22`
+                ? `${theme.text.quaternary}22`
                 : `${theme.color.info}22`,
               color: !propertyDialog.categoryId
-                ? theme.text.secondary
+                ? theme.text.quaternary
                 : theme.color.info,
               boxShadow: theme.shadow.secondary,
             }}
