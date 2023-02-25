@@ -84,6 +84,19 @@ export const updateCategoryProperty = createAsyncThunk(
   }
 )
 
+export const reorderCategoryProperty = createAsyncThunk(
+  'categoryProperty/reorder',
+  async ({ body }: { body: any }) => {
+    const response = await Axios({
+      method: 'PUT',
+      url: `/organize/category/property/reorder`,
+      body
+    })
+    
+    return response.data
+  }
+)
+
 export const createCategoryOption = createAsyncThunk(
   'categoryOption/create',
   async ({id, body}: { id: string, body: any }) => {

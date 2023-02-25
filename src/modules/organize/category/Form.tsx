@@ -34,7 +34,7 @@ import {
 } from 'components/shared/table/ActionButton'
 import { TextEllipsis } from 'components/shared/TextEllipsis'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
-import { createCategory, selectCategory, updateCategory } from './redux'
+import { createCategory, selectCategory, updateCategory, reorderCategoryProperty } from './redux'
 import useNotify from 'hooks/useNotify'
 
 const statusOption = [
@@ -115,16 +115,16 @@ const CategoryForm = ({ defaultValues, id }: any) => {
     id
       ? dispatch(updateCategory({ id, body: data }))
         .unwrap()
-        .then(data => {
-          notify(language['MSG_CATEGORY_UPDATE_SUCCESS'], 'success')
-          setPropertyDialog({ ...propertyDialog, categoryId: data.data.data?._id })
+        .then(response => {
+          notify(language[response?.msg], 'success')
+          setPropertyDialog({ ...propertyDialog, categoryId: response.data.data?._id })
         })
         .catch(err => notify(language[err?.message], 'error'))
       : dispatch(createCategory({ body: data }))
         .unwrap()
-        .then(data => {
-          notify(language['MSG_CATEGORY_CREATE_SUCCESS'], 'success')
-          setPropertyDialog({ ...propertyDialog, categoryId: data.data.data?._id })
+        .then(response => {
+          notify(language[response?.msg], 'success')
+          setPropertyDialog({ ...propertyDialog, categoryId: response.data.data?._id })
         })
         .catch(err => notify(language[err?.message], 'error'))
   }
@@ -139,8 +139,13 @@ const CategoryForm = ({ defaultValues, id }: any) => {
     const reorderedItems = items.map((item: any, index) => {
       return { _id: item._id, order: index }
     })
-    console.log(reorderedItems)
-    // TODO: reorder property
+    setProperties(items)
+    dispatch(reorderCategoryProperty({ body: reorderedItems }))
+      .unwrap()
+      .then((response) => {
+        notify(language[response?.msg], 'success')
+      })
+      .catch(err => notify(language[err?.message], 'error'))
   }
 
   const handleEditProperty = (prop) => {

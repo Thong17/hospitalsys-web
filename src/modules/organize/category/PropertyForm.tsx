@@ -90,7 +90,7 @@ export const PropertyForm = ({
   }
 
   const submit = (data) => {
-    if (!dialog.categoryId) return notify(language['MSG_NO_CATEGORY'], 'error')
+    if (!dialog.categoryId) return notify(language['ERROR:NO_CATEGORY'], 'error')
     dialog.propertyId
       ? dispatch(
           updateCategoryProperty({
@@ -100,9 +100,9 @@ export const PropertyForm = ({
         )
           .unwrap()
           .then((response) => {
-            if (response.code !== 'SUCCESS') return notify(response.msg, 'warning')
+            if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
             dispatch(getCategory({ id: dialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
-            notify(response.msg, 'success')
+            notify(language[response?.msg], 'success')
           })
           .catch(err => notify(err?.response?.msg, 'error'))
       : dispatch(
@@ -112,9 +112,9 @@ export const PropertyForm = ({
         )
           .unwrap()
           .then((response) => {
-            if (response.code !== 'SUCCESS') return notify(response.msg, 'warning')
+            if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
             dispatch(getCategory({ id: dialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
-            notify(response.msg, 'success')
+            notify(language[response?.msg], 'success')
           })
           .catch(err => notify(err?.response?.msg, 'error'))
   }
