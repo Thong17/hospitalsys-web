@@ -17,7 +17,7 @@ import { IImage } from 'components/shared/form/UploadField'
 import useWeb from 'hooks/useWeb'
 import { DialogTitle } from 'components/shared/DialogTitle'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
-import { createCategoryOption, getCategory, selectFormCategory, updateCategoryOption } from './redux'
+import { createCategoryOption, selectFormCategory, updateCategoryOption } from './redux'
 import useLanguage from 'hooks/useLanguage'
 import Button from 'components/shared/Button'
 
@@ -25,6 +25,7 @@ export const OptionForm = ({
   dialog,
   setDialog,
   defaultValues,
+  onUpdate,
   theme,
 }: any) => {
   const {
@@ -111,7 +112,7 @@ export const OptionForm = ({
           .unwrap()
           .then((response) => {
             if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
-            dispatch(getCategory({ id: dialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            onUpdate()
             notify(language[response?.msg], 'success')
           })
           .catch(err => notify(err?.response?.msg, 'error'))
@@ -119,7 +120,7 @@ export const OptionForm = ({
           .unwrap()
           .then((response) => {
             if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
-            dispatch(getCategory({ id: dialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            onUpdate()
             notify(language[response?.msg], 'success')
           })
           .catch(err => notify(err?.response?.msg, 'error'))

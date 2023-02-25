@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { DialogTitle } from 'components/shared/DialogTitle'
 import { IOptions, SelectField } from 'components/shared/form/SelectField'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
-import { createCategoryProperty, getCategory, selectFormCategory, updateCategoryProperty } from './redux'
+import { createCategoryProperty, selectFormCategory, updateCategoryProperty } from './redux'
 import useNotify from 'hooks/useNotify'
 import useLanguage from 'hooks/useLanguage'
 import Button from 'components/shared/Button'
@@ -39,6 +39,7 @@ export const PropertyForm = ({
   dialog,
   setDialog,
   defaultValues,
+  onUpdate,
   theme,
 }: any) => {
   const {
@@ -101,7 +102,7 @@ export const PropertyForm = ({
           .unwrap()
           .then((response) => {
             if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
-            dispatch(getCategory({ id: dialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            onUpdate()
             notify(language[response?.msg], 'success')
           })
           .catch(err => notify(err?.response?.msg, 'error'))
@@ -113,7 +114,7 @@ export const PropertyForm = ({
           .unwrap()
           .then((response) => {
             if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
-            dispatch(getCategory({ id: dialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            onUpdate()
             notify(language[response?.msg], 'success')
           })
           .catch(err => notify(err?.response?.msg, 'error'))

@@ -1,29 +1,20 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import CategoryForm from './Form'
 import Container from 'components/shared/Container'
 import StoreBreadcrumbs from '../components/Breadcrumbs'
-import { useAppDispatch, useAppSelector } from 'app/hooks'
 import { useParams } from 'react-router-dom'
-import { getCategory, selectCategory } from './redux'
+import { initBody } from './redux/constant'
 
 const Header = () => {
     return <><StoreBreadcrumbs page='categoryUpdate' /></>
 }
 
 export const UpdateCategory = () => {
-  const dispatch = useAppDispatch()
-  const { data: defaultValues } = useAppSelector(selectCategory)
   const { id } = useParams()
-  
-  useEffect(() => {
-    if (id) {
-      dispatch(getCategory({ id, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
-    }
-  }, [dispatch, id])
-  
+    
   return (
     <Container header={<Header />}>
-      <CategoryForm id={id} defaultValues={defaultValues} />
+      <CategoryForm id={id} defaultValues={initBody} />
     </Container>
   )
 }

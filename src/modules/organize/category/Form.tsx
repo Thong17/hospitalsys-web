@@ -38,11 +38,10 @@ import {
   UpdateButton,
 } from 'components/shared/table/ActionButton'
 import { TextEllipsis } from 'components/shared/TextEllipsis'
-import { useAppDispatch, useAppSelector } from 'app/hooks'
+import { useAppDispatch } from 'app/hooks'
 import {
   getCategory,
   createCategory,
-  selectCategory,
   updateCategory,
   reorderCategoryProperty,
   removeCategoryProperty,
@@ -57,9 +56,11 @@ const statusOption = [
 ]
 
 const CategoryForm = ({ defaultValues, id }: any) => {
+  const [categoryId, setCategoryId] = useState(id)
   const { theme } = useTheme()
   const navigate = useNavigate()
   const {
+    reset,
     watch,
     register,
     handleSubmit,
@@ -75,7 +76,6 @@ const CategoryForm = ({ defaultValues, id }: any) => {
   const [status, setStatus] = useState(defaultValues?.status)
   const [iconPath, setIconPath] = useState<IImage>(defaultValues?.icon)
   const statusValue = watch('status')
-  const { data: category } = useAppSelector(selectCategory)
   const [properties, setProperties] = useState<any>([])
   const [propertyValue, setPropertyValue] = useState(initProperty)
   const [optionValue, setOptionValue] = useState(initOption)
@@ -91,10 +91,22 @@ const CategoryForm = ({ defaultValues, id }: any) => {
     categoryId: id,
   })
 
+  const getCategoryDetail = (id) => {
+    if (!id) return
+    dispatch(getCategory({ id, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+      .unwrap()
+      .then((response) => {
+        if (response.code !== 'SUCCESS' || !response?.data) return notify(language[response?.msg], 'error')
+        const { properties, ...rest } = response?.data
+        setProperties(properties)
+        reset(rest)
+      })
+  }
+
   useEffect(() => {
-    if (!category?.properties) return
-    setProperties(category.properties)
-  }, [category?.properties])
+    getCategoryDetail(id)
+    // eslint-disable-next-line
+  }, [id])
 
   useEffect(() => {
     const selectedStatus = statusOption.find((key) => key.value === statusValue)
@@ -131,9 +143,15 @@ const CategoryForm = ({ defaultValues, id }: any) => {
           .unwrap()
           .then((response) => {
             notify(language[response?.msg], 'success')
+            const id = response.data?._id
+            setCategoryId(id)
             setPropertyDialog({
               ...propertyDialog,
-              categoryId: response.data.data?._id,
+              categoryId: id,
+            })
+            setOptionDialog({
+              ...optionDialog,
+              categoryId: id
             })
           })
           .catch((err) => notify(language[err?.message], 'error'))
@@ -141,9 +159,16 @@ const CategoryForm = ({ defaultValues, id }: any) => {
           .unwrap()
           .then((response) => {
             notify(language[response?.msg], 'success')
+            const id = response.data?._id
+            setProperties([])
+            setCategoryId(id)
             setPropertyDialog({
               ...propertyDialog,
-              categoryId: response.data.data?._id,
+              categoryId: id,
+            })
+            setOptionDialog({
+              ...optionDialog,
+              categoryId: id
             })
           })
           .catch((err) => notify(language[err?.message], 'error'))
@@ -183,12 +208,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
     dispatch(toggleCategoryOption({ id: optionId }))
       .unwrap()
       .then((response) => {
-        dispatch(
-          getCategory({
-            id: optionDialog.categoryId,
-            fields: ['name', 'icon', 'status', 'description', 'properties'],
-          })
-        )
+        getCategoryDetail(categoryId)
         notify(language[response?.msg], 'success')
       })
       .catch((err) => notify(language[err?.message], 'error'))
@@ -214,12 +234,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
         dispatch(removeCategoryOption({ id }))
           .unwrap()
           .then((response) => {
-            dispatch(
-              getCategory({
-                id: optionDialog.categoryId,
-                fields: ['name', 'icon', 'status', 'description', 'properties'],
-              })
-            )
+            getCategoryDetail(categoryId)
             notify(language[response?.msg], 'success')
           })
           .catch((err) => notify(language[err?.message], 'error'))
@@ -237,12 +252,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
         dispatch(removeCategoryProperty({ id }))
           .unwrap()
           .then((response) => {
-            dispatch(
-              getCategory({
-                id: propertyDialog.categoryId,
-                fields: ['name', 'icon', 'status', 'description', 'properties'],
-              })
-            )
+            getCategoryDetail(categoryId)
             notify(language[response?.msg], 'success')
           })
           .catch((err) => notify(language[err?.message], 'error'))
@@ -532,12 +542,14 @@ const CategoryForm = ({ defaultValues, id }: any) => {
         dialog={propertyDialog}
         setDialog={setPropertyDialog}
         theme={theme}
+        onUpdate={() => getCategoryDetail(categoryId)}
         defaultValues={propertyValue}
       />
       <OptionForm
         dialog={optionDialog}
         setDialog={setOptionDialog}
         theme={theme}
+        onUpdate={() => getCategoryDetail(categoryId)}
         defaultValues={optionValue}
       />
     </div>
