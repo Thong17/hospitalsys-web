@@ -30,9 +30,9 @@ export const importColumns = ['ID', Object.keys(languages).map(lang => `NAME_${l
 export const importColumnData: ITableColumn<any>[] = [
   { id: 'no', label: 'ID' },
   ...Object.keys(languages).map(lang => ({ id: `name${lang}`, label: `${lang}` })),
-  { id: 'description', label: 'Description' },
-  { id: 'status', label: 'Status' },
-  { id: 'action', label: 'Remove', align: 'right' },
+  { id: 'description', label: 'DESCRIPTION' },
+  { id: 'status', label: 'STATUS' },
+  { id: 'action', label: 'REMOVE', align: 'right' },
 ]
 
 export const createData = (

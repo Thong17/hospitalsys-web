@@ -31,7 +31,7 @@ import { languages } from 'contexts/language/constant'
 export const Categories = () => {
   const dispatch = useAppDispatch()
   const { data: categories, count, status } = useAppSelector(selectListCategory)
-  const { lang } = useLanguage()
+  const { lang, language } = useLanguage()
   const { device } = useWeb()
   const { user } = useAuth()
   const { theme } = useTheme()
@@ -105,19 +105,19 @@ export const Categories = () => {
         })
         return mappedData
       })
-
-      return setImportDialog({ open: true, data: importList })
+      setImportDialog({ open: true, data: importList })
     })
+    .catch(err => console.error(err))
   }
 
   const handleCloseImport = () => {
     confirm({
-      title: 'Discard Import',
-      description: 'Do you want to discard all the change?',
+      title: language['TITLE:DISCARD_IMPORT'],
+      description: language['DESCRIPTION:DISCARD_IMPORT'],
       variant: 'error',
     })
       .then(() => setImportDialog({ ...importDialog, open: false }))
-      .catch(() => setImportDialog({ ...importDialog }))
+      .catch(() => null)
   }
 
   const handleConfirmImport = () => {
@@ -127,10 +127,12 @@ export const Categories = () => {
       body: importDialog.data,
     })
     loadify(response)
-    response.then(() => {
-      setImportDialog({ ...importDialog, open: false })
-      dispatch(getListCategory({ query: queryParams }))
-    })
+    response
+      .then(() => {
+        setImportDialog({ ...importDialog, open: false })
+        dispatch(getListCategory({ query: queryParams }))
+      })
+      .catch(err => console.error(err))
   }
 
   useEffect(() => {
@@ -177,9 +179,8 @@ export const Categories = () => {
 
   const handleToggleStatus = (id) => {
     confirm({
-      title: 'Are you sure you want to toggle the status?',
-      description:
-        'Toggle the status will update category status to opposite current status.',
+      title: language['TITLE:TOGGLE_STATUS'],
+      description: language['DESCRIPTION:TOGGLE_STATUS'],
       variant: 'error',
     })
       .then(() => {
@@ -214,7 +215,7 @@ export const Categories = () => {
           />
         </div>
         <DialogActions>
-          <Button onClick={handleCloseImport} style={{ backgroundColor: `${theme.color.error}22`, color: theme.color.error }}>Cancel</Button>
+          <Button onClick={handleCloseImport} style={{ backgroundColor: `${theme.color.error}22`, color: theme.color.error }}>{language['CANCEL']}</Button>
           <CustomButton
             style={{
               marginLeft: 10,
@@ -226,7 +227,7 @@ export const Categories = () => {
             onClick={handleConfirmImport}
             autoFocus
           >
-            Import
+            {language['IMPORT']}
           </CustomButton>
         </DialogActions>
       </AlertDialog>

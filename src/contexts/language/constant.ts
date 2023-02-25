@@ -186,6 +186,8 @@ export const languages = {
     SETUP: 'Setup',
     CALL: 'Call',
     COMPLETE: 'Complete',
+    IMPORT: 'Import',
+    REMOVE: 'Remove',
     // Message
     TYPE_TO_SEARCH: 'Type to search...',
     CONFIRM_DELETE: 'Do you want to delete?',
@@ -225,6 +227,10 @@ export const languages = {
     CHOICE: 'Choice',
     OPTION: 'Option',
 
+    'TITLE:TOGGLE_STATUS': 'Are you sure you want to toggle the status?',
+    'DESCRIPTION:TOGGLE_STATUS': 'Toggle the status will update category status to opposite current status.',
+    'TITLE:DISCARD_IMPORT': 'Are you sure you want to discard the import?',
+    'DESCRIPTION:DISCARD_IMPORT': 'Discard import description.',
     'TITLE:DELETE_OPTION': 'Are you sure you want to delete this option?',
     'DESCRIPTION:DELETE_OPTION': 'Delete option description.',
     'TITLE:DELETE_PROPERTY': 'Are you sure you want to delete this property?',
@@ -432,6 +438,8 @@ export const languages = {
     SETUP: 'រៀបចំ',
     CALL: 'ហៅ',
     COMPLETE: 'រួចរាល់',
+    IMPORT: 'នាំចូល',
+    REMOVE: 'លុបចេញ',
     // Message
     TYPE_TO_SEARCH: 'វាយបញ្ចូលដើម្បីស្វែងរក...',
     CONFIRM_DELETE: 'តើអ្នកពិតជាចង់លុបមែនទេ?',
@@ -471,6 +479,10 @@ export const languages = {
     CHOICE: 'Choice',
     OPTION: 'Option',
 
+    'TITLE:TOGGLE_STATUS': 'Are you sure you want to toggle the status?',
+    'DESCRIPTION:TOGGLE_STATUS': 'Toggle the status will update category status to opposite current status.',
+    'TITLE:DISCARD_IMPORT': 'Are you sure you want to discard the import?',
+    'DESCRIPTION:DISCARD_IMPORT': 'Discard import description.',
     'TITLE:DELETE_OPTION': 'Are you sure you want to delete this option?',
     'DESCRIPTION:DELETE_OPTION': 'Delete option description.',
     'TITLE:DELETE_PROPERTY': 'Are you sure you want to delete this property?',
