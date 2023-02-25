@@ -34,7 +34,7 @@ import {
 } from 'components/shared/table/ActionButton'
 import { TextEllipsis } from 'components/shared/TextEllipsis'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
-import { createCategory, selectCategory, updateCategory, reorderCategoryProperty } from './redux'
+import { createCategory, selectCategory, updateCategory, reorderCategoryProperty, removeCategoryProperty, getCategory } from './redux'
 import useNotify from 'hooks/useNotify'
 
 const statusOption = [
@@ -185,11 +185,15 @@ const CategoryForm = ({ defaultValues, id }: any) => {
       variant: 'error',
     })
       .then(() => {
-        // TODO: delete property
+        dispatch(removeCategoryProperty({ id }))
+          .unwrap()
+          .then((response) => {
+            dispatch(getCategory({ id: propertyDialog.categoryId, fields: ['name', 'icon', 'status', 'description', 'properties'] }))
+            notify(language[response?.msg], 'success')
+          })
+          .catch(err => notify(language[err?.message], 'error'))
       })
-      .catch(() => {
-        return
-      })
+      .catch(() => null)
   }
 
   return (

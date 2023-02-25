@@ -84,6 +84,18 @@ export const updateCategoryProperty = createAsyncThunk(
   }
 )
 
+export const removeCategoryProperty = createAsyncThunk(
+  'categoryProperty/remove',
+  async ({ id }: { id: any }) => {
+    const response = await Axios({
+      method: 'DELETE',
+      url: `/organize/category/property/remove/${id}`,
+    })
+    
+    return response.data
+  }
+)
+
 export const reorderCategoryProperty = createAsyncThunk(
   'categoryProperty/reorder',
   async ({ body }: { body: any }) => {
