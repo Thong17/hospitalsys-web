@@ -129,7 +129,7 @@ const Input: ForwardRefRenderFunction<HTMLInputElement, IUploadField> = (
           className={`input ${err && 'input-error'}`}
           style={{ height: height ? height : 35 }}
         >
-          <span>Drag & Drop</span>
+          <span>Browse</span>
         </label>
       )}
       <input ref={ref} type='file' name={name} id={name} {...props} />
