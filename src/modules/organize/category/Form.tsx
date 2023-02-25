@@ -232,8 +232,8 @@ const CategoryForm = ({ defaultValues, id }: any) => {
 
   const handleDeleteOption = (id) => {
     confirm({
-      title: 'Delete Option',
-      description: 'Are you sure?',
+      title: language['TITLE:DELETE_OPTION'],
+      description: language['DESCRIPTION:DELETE_OPTION'],
       variant: 'error',
     })
       .then(() => {
@@ -250,8 +250,8 @@ const CategoryForm = ({ defaultValues, id }: any) => {
 
   const handleDeleteProperty = (id) => {
     confirm({
-      title: 'Delete Property',
-      description: 'Are you sure?',
+      title: language['TITLE:DELETE_PROPERTY'],
+      description: language['DESCRIPTION:DELETE_PROPERTY'],
       variant: 'error',
     })
       .then(() => {
@@ -294,7 +294,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
               <LocaleField
                 onChange={handleChangeCategory}
                 err={errors?.name}
-                describe='Name'
+                describe={language['NAME']}
                 name='name'
                 defaultValue={getValues('name')}
               />
@@ -302,7 +302,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
             <div style={{ gridArea: 'status' }}>
               <SelectField
                 options={statusOption}
-                label='Status'
+                label={language['STATUS']}
                 value={status}
                 err={errors?.status?.message}
                 {...register('status')}
@@ -313,7 +313,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
                 images={iconPath && [iconPath]}
                 selected={getValues('icon')?._id}
                 name='icon'
-                label='Icon'
+                label={language['ICON']}
                 accept='image/png, image/jpeg'
                 onChange={handleChangeFile}
               />
@@ -321,7 +321,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
             <div style={{ gridArea: 'description' }}>
               <DetailField
                 type='text'
-                label='Description'
+                label={language['DESCRIPTION']}
                 style={{ height: 70 }}
                 {...register('description')}
               />
@@ -342,7 +342,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
                 }}
                 onClick={() => navigate(-1)}
               >
-                Cancel
+                {language['CANCEL']}
               </Button>
               <Button
                 type='submit'
@@ -353,7 +353,7 @@ const CategoryForm = ({ defaultValues, id }: any) => {
                   color: theme.color.info,
                 }}
               >
-                {id ? 'Save' : 'Create'}
+                {id ? language['SAVE'] : language['CREATE']}
               </Button>
             </div>
           </div>

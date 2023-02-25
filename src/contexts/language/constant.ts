@@ -217,6 +217,27 @@ export const languages = {
     TOTAL_PENALTY: 'Total\u00a0Penalty',
     DEPOSIT_LOAN: 'Deposit\u00a0Balance',
     GRAND_TOTAL: 'Grand\u00a0Total',
+    // Web Message Category
+    'TITLE:DELETE_OPTION': 'Are you sure you want to delete this option?',
+    'DESCRIPTION:DELETE_OPTION': 'Delete option description.',
+    'TITLE:DELETE_PROPERTY': 'Are you sure you want to delete this property?',
+    'DESCRIPTION:DELETE_PROPERTY': 'Delete property description.',
+    // Api Message Category
+    'SUCCESS:CATEGORY_CREATED': 'Category has been created successfully.',
+    'SUCCESS:CATEGORY_UPDATED': 'Category has been updated successfully.',
+    'SUCCESS:CATEGORY_TOGGLED': 'Category has been updated successfully.',
+    'SUCCESS:CATEGORY_REMOVED': 'Category has been removed successfully.',
+    'SUCCESS:PROPERTY_CREATED': 'Property has been created successfully.',
+    'SUCCESS:PROPERTY_UPDATED': 'Property has been updated successfully.',
+    'SUCCESS:PROPERTY_REORDERED': 'Property has been reordered successfully.',
+    'SUCCESS:PROPERTY_REMOVED': 'Property has been removed successfully.',
+    'SUCCESS:OPTION_CREATED': 'Option has been created successfully.',
+    'SUCCESS:OPTION_UPDATED': 'Option has been updated successfully.',
+    'SUCCESS:OPTION_TOGGLED': 'Option has been updated successfully.',
+    'SUCCESS:OPTION_REMOVED': 'Option has been removed successfully.',
+    'SUCCESS:CATEGORY_IMPORTED': 'Category has been imported successfully.',
+    'SUCCESS:CATEGORY_INSERTED': 'Category has been inserted successfully.',
+    
   },
   Khmer: {
     TEST: 'សាកល្បង',
@@ -435,5 +456,26 @@ export const languages = {
     TOTAL_PENALTY: 'ពិន័យសរុប',
     DEPOSIT_LOAN: 'ដាក់ប្រាក់ដើម',
     GRAND_TOTAL: 'តម្លៃ​សរុប',
+    // Web Message Category
+    'TITLE:DELETE_OPTION': 'Are you sure you want to delete this option?',
+    'DESCRIPTION:DELETE_OPTION': 'Delete option description.',
+    'TITLE:DELETE_PROPERTY': 'Are you sure you want to delete this property?',
+    'DESCRIPTION:DELETE_PROPERTY': 'Delete property description.',
+    // Api Message Category
+    'SUCCESS:CATEGORY_CREATED': 'Category has been created successfully.',
+    'SUCCESS:CATEGORY_UPDATED': 'Category has been updated successfully.',
+    'SUCCESS:CATEGORY_TOGGLED': 'Category has been updated successfully.',
+    'SUCCESS:CATEGORY_REMOVED': 'Category has been removed successfully.',
+    'SUCCESS:PROPERTY_CREATED': 'Property has been created successfully.',
+    'SUCCESS:PROPERTY_UPDATED': 'Property has been updated successfully.',
+    'SUCCESS:PROPERTY_REORDERED': 'Property has been reordered successfully.',
+    'SUCCESS:PROPERTY_REMOVED': 'Property has been removed successfully.',
+    'SUCCESS:OPTION_CREATED': 'Option has been created successfully.',
+    'SUCCESS:OPTION_UPDATED': 'Option has been updated successfully.',
+    'SUCCESS:OPTION_TOGGLED': 'Option has been updated successfully.',
+    'SUCCESS:OPTION_REMOVED': 'Option has been removed successfully.',
+    'SUCCESS:CATEGORY_IMPORTED': 'Category has been imported successfully.',
+    'SUCCESS:CATEGORY_INSERTED': 'Category has been inserted successfully.',
+
   }
 }
