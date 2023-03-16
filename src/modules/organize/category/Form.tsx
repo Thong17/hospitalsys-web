@@ -14,41 +14,11 @@ import Axios from 'constants/functions/Axios'
 import { IImage } from 'components/shared/form/UploadField'
 import useTheme from 'hooks/useTheme'
 import { useNavigate } from 'react-router-dom'
-import { PropertyForm } from './PropertyForm'
-import { OptionForm } from './OptionForm'
-import {
-  initOption,
-  initProperty,
-  mapOptionBody,
-  mapPropertyBody,
-} from './redux/constant'
 import useLanguage from 'hooks/useLanguage'
-import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd'
-import { Section } from 'components/shared/Section'
-import { MenuDialog } from 'components/shared/MenuDialog'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import { MenuItem } from '@mui/material'
-import useAlert from 'hooks/useAlert'
-import { CustomOptionContainer } from 'styles/container'
-import AddRoundedIcon from '@mui/icons-material/AddRounded'
-import RadioButtonCheckedRoundedIcon from '@mui/icons-material/RadioButtonCheckedRounded'
-import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded'
-import {
-  DeleteButton,
-  UpdateButton,
-} from 'components/shared/table/ActionButton'
-import { TextEllipsis } from 'components/shared/TextEllipsis'
 import { useAppDispatch } from 'app/hooks'
-import {
-  getCategory,
-  createCategory,
-  updateCategory,
-  reorderCategoryProperty,
-  removeCategoryProperty,
-  toggleCategoryOption,
-  removeCategoryOption,
-} from './redux'
+import { getCategory, createCategory, updateCategory } from './redux'
 import useNotify from 'hooks/useNotify'
+import PropertyOptionForm from 'components/shared/form/PropertyOptionForm'
 
 const statusOption = [
   { label: 'Enabled', value: true },
@@ -56,7 +26,6 @@ const statusOption = [
 ]
 
 const CategoryForm = ({ defaultValues, id }: any) => {
-  const [categoryId, setCategoryId] = useState(id)
   const { theme } = useTheme()
   const navigate = useNavigate()
   const {
@@ -68,17 +37,14 @@ const CategoryForm = ({ defaultValues, id }: any) => {
     getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(categorySchema), defaultValues })
-  const { width, device } = useWeb()
-  const confirm = useAlert()
+  const { width } = useWeb()
   const dispatch = useAppDispatch()
   const { notify } = useNotify()
-  const { language, lang } = useLanguage()
+  const { language } = useLanguage()
   const [status, setStatus] = useState(defaultValues?.status)
   const [iconPath, setIconPath] = useState<IImage>(defaultValues?.icon)
   const statusValue = watch('status')
-  const [properties, setProperties] = useState<any>([])
-  const [propertyValue, setPropertyValue] = useState(initProperty)
-  const [optionValue, setOptionValue] = useState(initOption)
+  const [categoryId, setCategoryId] = useState(undefined)
   const [optionDialog, setOptionDialog] = useState({
     open: false,
     propertyId: null,
@@ -96,21 +62,20 @@ const CategoryForm = ({ defaultValues, id }: any) => {
     dispatch(
       getCategory({
         id,
-        fields: ['name', 'icon', 'status', 'description', 'properties'],
+        fields: ['name', 'icon', 'status', 'description'],
       })
     )
       .unwrap()
       .then((response) => {
         if (response.code !== 'SUCCESS' || !response?.data)
           return notify(language[response?.msg], 'error')
-        const { properties, ...rest } = response?.data
-        setProperties(properties)
-        reset(rest)
+        reset(response?.data)
       })
   }
 
   useEffect(() => {
     getCategoryDetail(id)
+    setCategoryId(id)
     // eslint-disable-next-line
   }, [id])
 
@@ -150,7 +115,6 @@ const CategoryForm = ({ defaultValues, id }: any) => {
           .then((response) => {
             notify(language[response?.msg], 'success')
             const id = response.data?._id
-            setCategoryId(id)
             setPropertyDialog({
               ...propertyDialog,
               categoryId: id,
@@ -166,7 +130,6 @@ const CategoryForm = ({ defaultValues, id }: any) => {
           .then((response) => {
             notify(language[response?.msg], 'success')
             const id = response.data?._id
-            setProperties([])
             setCategoryId(id)
             setPropertyDialog({
               ...propertyDialog,
@@ -178,92 +141,6 @@ const CategoryForm = ({ defaultValues, id }: any) => {
             })
           })
           .catch((err) => notify(language[err?.message], 'error'))
-  }
-
-  const handleDropProperty = (event: any) => {
-    if (!event.destination || event.destination?.index === event.source?.index)
-      return
-
-    const items = Array.from(properties)
-    const [reorderItem] = items.splice(event?.source?.index, 1)
-    items.splice(event?.destination?.index, 0, reorderItem)
-    const reorderedItems = items.map((item: any, index) => {
-      return { _id: item._id, order: index }
-    })
-    setProperties(items)
-    dispatch(reorderCategoryProperty({ body: reorderedItems }))
-      .unwrap()
-      .then((response) => {
-        notify(language[response?.msg], 'success')
-      })
-      .catch((err) => notify(language[err?.message], 'error'))
-  }
-
-  const handleEditProperty = (prop) => {
-    if (!prop) return
-    setPropertyValue(mapPropertyBody(prop))
-    setPropertyDialog({
-      ...propertyDialog,
-      propertyId: prop._id,
-      open: true,
-    })
-  }
-
-  const handleToggleDefault = (optionId) => {
-    if (!optionId) return
-    dispatch(toggleCategoryOption({ id: optionId }))
-      .unwrap()
-      .then((response) => {
-        getCategoryDetail(categoryId)
-        notify(language[response?.msg], 'success')
-      })
-      .catch((err) => notify(language[err?.message], 'error'))
-  }
-
-  const handleEditOption = (option, propertyId) => {
-    setOptionValue(mapOptionBody(option))
-    setOptionDialog({
-      ...optionDialog,
-      propertyId,
-      optionId: option._id,
-      open: true,
-    })
-  }
-
-  const handleDeleteOption = (id) => {
-    confirm({
-      title: language['TITLE:DELETE_OPTION'],
-      description: language['DESCRIPTION:DELETE_OPTION'],
-      variant: 'error',
-    })
-      .then(() => {
-        dispatch(removeCategoryOption({ id }))
-          .unwrap()
-          .then((response) => {
-            getCategoryDetail(categoryId)
-            notify(language[response?.msg], 'success')
-          })
-          .catch((err) => notify(language[err?.message], 'error'))
-      })
-      .catch(() => null)
-  }
-
-  const handleDeleteProperty = (id) => {
-    confirm({
-      title: language['TITLE:DELETE_PROPERTY'],
-      description: language['DESCRIPTION:DELETE_PROPERTY'],
-      variant: 'error',
-    })
-      .then(() => {
-        dispatch(removeCategoryProperty({ id }))
-          .unwrap()
-          .then((response) => {
-            getCategoryDetail(categoryId)
-            notify(language[response?.msg], 'success')
-          })
-          .catch((err) => notify(language[err?.message], 'error'))
-      })
-      .catch(() => null)
   }
 
   return (
@@ -358,204 +235,14 @@ const CategoryForm = ({ defaultValues, id }: any) => {
             </div>
           </div>
         </div>
-        <div>
-          <Button
-            disabled={!propertyDialog.categoryId}
-            fullWidth
-            style={{
-              marginTop: 20,
-              backgroundColor: !propertyDialog.categoryId
-                ? `${theme.text.quaternary}22`
-                : `${theme.color.info}22`,
-              color: !propertyDialog.categoryId
-                ? theme.text.quaternary
-                : theme.color.info,
-              boxShadow: theme.shadow.secondary,
-            }}
-            onClick={() => {
-              setPropertyValue(initProperty)
-              setPropertyDialog({
-                ...propertyDialog,
-                open: true,
-              })
-            }}
-          >
-            {language['ADD_PROPERTY']}
-          </Button>
-          <DragDropContext onDragEnd={handleDropProperty}>
-            <Droppable droppableId='properties'>
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  {properties?.map((property, index) => {
-                    return (
-                      <Draggable
-                        key={property._id}
-                        draggableId={property._id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <Section
-                              style={{
-                                position: 'relative',
-                                boxSizing: 'border-box',
-                                paddingTop: 30,
-                              }}
-                              boxShadow={theme.shadow.secondary}
-                              describe={
-                                property?.name?.[lang] ||
-                                property?.name?.['English']
-                              }
-                            >
-                              <div
-                                className='action'
-                                style={{
-                                  position: 'absolute',
-                                  top: -7,
-                                  right: 0,
-                                }}
-                              >
-                                <MenuDialog
-                                  label={
-                                    <MoreHorizIcon
-                                      style={{
-                                        color: theme.text.secondary,
-                                      }}
-                                    />
-                                  }
-                                >
-                                  <MenuItem
-                                    component='div'
-                                    onClick={() => handleEditProperty(property)}
-                                  >
-                                    {language['EDIT']}
-                                  </MenuItem>
-                                  <MenuItem
-                                    component='div'
-                                    onClick={() =>
-                                      handleDeleteProperty(property?._id)
-                                    }
-                                  >
-                                    {language['DELETE']}
-                                  </MenuItem>
-                                </MenuDialog>
-                              </div>
-                              <CustomOptionContainer
-                                device={device}
-                                styled={theme}
-                                loading={'false'}
-                              >
-                                <Button
-                                  className='create-button'
-                                  onClick={() => {
-                                    setOptionValue(initOption)
-                                    setOptionDialog({
-                                      ...optionDialog,
-                                      propertyId: property?._id,
-                                      open: true,
-                                    })
-                                  }}
-                                >
-                                  <AddRoundedIcon />
-                                </Button>
-                                {property?.options?.map((option, index) => {
-                                  return (
-                                    option.property === property._id && (
-                                      <div
-                                        key={index}
-                                        className='option-container'
-                                      >
-                                        <div
-                                          style={{
-                                            position: 'absolute',
-                                            bottom: 6,
-                                            left: 10,
-                                            color: theme.text.quaternary,
-                                            zIndex: 10,
-                                          }}
-                                        >
-                                          {option.isDefault ? (
-                                            <RadioButtonCheckedRoundedIcon
-                                              onClick={() =>
-                                                handleToggleDefault(option._id)
-                                              }
-                                              style={{ cursor: 'pointer' }}
-                                              fontSize='small'
-                                            />
-                                          ) : (
-                                            <RadioButtonUncheckedRoundedIcon
-                                              onClick={() =>
-                                                handleToggleDefault(option._id)
-                                              }
-                                              style={{ cursor: 'pointer' }}
-                                              fontSize='small'
-                                            />
-                                          )}
-                                        </div>
-                                        <div className='action'>
-                                          <UpdateButton
-                                            style={{ margin: 0 }}
-                                            onClick={() =>
-                                              handleEditOption(
-                                                option,
-                                                property._id
-                                              )
-                                            }
-                                          />
-                                          <DeleteButton
-                                            onClick={() =>
-                                              handleDeleteOption(option._id)
-                                            }
-                                          />
-                                        </div>
-                                        <div className='option-detail'>
-                                          <TextEllipsis className='title'>
-                                            {option.name?.[lang] ||
-                                              option.name?.['English']}
-                                          </TextEllipsis>
-                                          <TextEllipsis className='description'>
-                                            {option.description}
-                                          </TextEllipsis>
-                                        </div>
-                                        <TextEllipsis className='option-price'>
-                                          {option.price} {option.currency}
-                                        </TextEllipsis>
-                                      </div>
-                                    )
-                                  )
-                                })}
-                              </CustomOptionContainer>
-                            </Section>
-                          </div>
-                        )}
-                      </Draggable>
-                    )
-                  })}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </div>
+        <PropertyOptionForm
+          categoryId={categoryId}
+          optionDialog={optionDialog}
+          propertyDialog={propertyDialog}
+          setOptionDialog={setOptionDialog}
+          setPropertyDialog={setPropertyDialog}
+        />
       </form>
-      <PropertyForm
-        dialog={propertyDialog}
-        setDialog={setPropertyDialog}
-        theme={theme}
-        onUpdate={() => getCategoryDetail(categoryId)}
-        defaultValues={propertyValue}
-      />
-      <OptionForm
-        dialog={optionDialog}
-        setDialog={setOptionDialog}
-        theme={theme}
-        onUpdate={() => getCategoryDetail(categoryId)}
-        defaultValues={optionValue}
-      />
     </div>
   )
 }
