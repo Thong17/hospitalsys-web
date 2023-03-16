@@ -37,7 +37,7 @@ const Profile: FC<IProfile> = ({ id, username, picture, sidebar }) => {
           aria-controls='profile-menu'
           onClick={(event) => setAnchorEl(event.currentTarget)}
         >
-          <Box id='profile'>
+          <Box id='profile-img'>
             {picture ? (
               <img
                 src={`${process.env.REACT_APP_API_UPLOADS}${picture}`}

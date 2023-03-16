@@ -164,7 +164,7 @@ export const CustomProfile = styled('div')(
     boxSizing: 'border-box',
     cursor: 'pointer',
     position: 'relative',
-    '& #profile': {
+    '& #profile-img': {
       height: '100%',
       width: '100%',
       backgroundColor: styled.background.secondary,
