@@ -102,6 +102,7 @@ export const OptionForm = ({
   }
 
   const submit = (data) => {
+    delete data?.imagePath
     const body = {
       ...data,
       category: dialog.categoryId,
