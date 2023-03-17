@@ -20,8 +20,10 @@ import { useAppDispatch, useAppSelector } from 'app/hooks'
 import { createCategoryOption, selectFormCategory, updateCategoryOption } from './redux'
 import useLanguage from 'hooks/useLanguage'
 import Button from 'components/shared/Button'
+import { createProductOption, updateProductOption } from '../product/redux'
 
 export const OptionForm = ({
+  productId,
   dialog,
   setDialog,
   defaultValues,
@@ -103,6 +105,31 @@ export const OptionForm = ({
 
   const submit = (data) => {
     delete data?.imagePath
+    if (productId) {
+      const body = {
+        ...data,
+        product: productId,
+        property: dialog.propertyId,
+      }
+      dialog.optionId
+      ? dispatch(updateProductOption({ id: dialog.optionId, body }))
+          .unwrap()
+          .then((response) => {
+            if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
+            onUpdate()
+            notify(language[response?.msg], 'success')
+          })
+          .catch(err => notify(err?.response?.msg, 'error'))
+      : dispatch(createProductOption({ body }))
+          .unwrap()
+          .then((response) => {
+            if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
+            onUpdate()
+            notify(language[response?.msg], 'success')
+          })
+          .catch(err => notify(err?.response?.msg, 'error'))
+      return
+    }
     const body = {
       ...data,
       category: dialog.categoryId,

@@ -47,6 +47,131 @@ export const getProduct = createAsyncThunk(
   }
 )
 
+export const getProductProperties = createAsyncThunk(
+  'product/properties',
+  async ({id}: { id: string }) => {
+    const response = await Axios({
+      method: 'GET',
+      url: `/organize/product/property/list/${id}`,
+    })
+    
+    return response?.data
+  }
+)
+
+export const getProductOptions = createAsyncThunk(
+  'product/options',
+  async ({id}: { id: string }) => {
+    const response = await Axios({
+      method: 'GET',
+      url: `/organize/product/options/${id}`,
+    })
+    
+    return response?.data
+  }
+)
+
+export const createProductProperty = createAsyncThunk(
+  'productProperty/create',
+  async ({ body }: { body: any }) => {
+    const response = await Axios({
+      method: 'POST',
+      url: `/organize/product/property/create`,
+      body
+    })
+    
+    return response.data
+  }
+)
+
+export const updateProductProperty = createAsyncThunk(
+  'productProperty/update',
+  async ({ id, body }: { id: string, body: any }) => {
+    const response = await Axios({
+      method: 'PUT',
+      url: `/organize/product/property/update/${id}`,
+      body
+    })
+    
+    return response.data
+  }
+)
+
+export const removeProductProperty = createAsyncThunk(
+  'productProperty/remove',
+  async ({ id }: { id: any }) => {
+    const response = await Axios({
+      method: 'DELETE',
+      url: `/organize/product/property/remove/${id}`,
+    })
+    
+    return response.data
+  }
+)
+
+export const reorderProductProperty = createAsyncThunk(
+  'productProperty/reorder',
+  async ({ body }: { body: any }) => {
+    const response = await Axios({
+      method: 'PUT',
+      url: `/organize/product/property/reorder`,
+      body
+    })
+    
+    return response.data
+  }
+)
+
+export const createProductOption = createAsyncThunk(
+  'productOption/create',
+  async ({ body }: { body: any }) => {
+    const response = await Axios({
+      method: 'POST',
+      url: `/organize/product/option/create`,
+      body: body
+    })
+    
+    return response.data
+  }
+)
+
+export const updateProductOption = createAsyncThunk(
+  'productOption/update',
+  async ({ id, body }: { id: string, body: any }) => {
+    const response = await Axios({
+      method: 'PUT',
+      url: `/organize/product/option/update/${id}`,
+      body: body
+    })
+    
+    return response.data
+  }
+)
+
+export const removeProductOption = createAsyncThunk(
+  'productOption/remove',
+  async ({ id }: { id: any }) => {
+    const response = await Axios({
+      method: 'DELETE',
+      url: `/organize/product/option/remove/${id}`,
+    })
+    
+    return response.data
+  }
+)
+
+export const toggleProductOption = createAsyncThunk(
+  'productOption/toggle',
+  async ({ id }: { id: string }) => {
+    const response = await Axios({
+      method: 'PUT',
+      url: `/organize/product/option/toggle/${id}`,
+    })
+    
+    return response.data
+  }
+)
+
 export const productSlice = createSlice({
   name: 'product',
   initialState,
@@ -147,12 +272,82 @@ export const productSlice = createSlice({
         state.single.status = 'SUCCESS'
         state.single.data = action.payload.data
       })
+
+      // Get properties
+      .addCase(getProductProperties.pending, (state) => {
+        state.properties.status = 'LOADING'
+      })
+      .addCase(getProductProperties.rejected, (state) => {
+        state.properties.status = 'FAILED'
+      })
+      .addCase(getProductProperties.fulfilled, (state, action) => {
+        state.properties.status = 'SUCCESS'
+        state.properties.data = action.payload.data
+      })
+
+      // Get option
+      .addCase(getProductOptions.pending, (state) => {
+        state.options.status = 'LOADING'
+      })
+      .addCase(getProductOptions.rejected, (state) => {
+        state.options.status = 'FAILED'
+      })
+      .addCase(getProductOptions.fulfilled, (state, action) => {
+        state.options.status = 'SUCCESS'
+        state.options.data = action.payload.data
+      })
+
+      // Update Property
+      .addCase(updateProductProperty.pending, (state) => {
+        state.form.status = 'LOADING'
+      })
+      .addCase(updateProductProperty.rejected, (state) => {
+        state.form.status = 'FAILED'
+      })
+      .addCase(updateProductProperty.fulfilled, (state) => {
+        state.form.status = 'SUCCESS'
+      })
+
+      // Create Property
+      .addCase(createProductProperty.pending, (state) => {
+        state.form.status = 'LOADING'
+      })
+      .addCase(createProductProperty.rejected, (state) => {
+        state.form.status = 'FAILED'
+      })
+      .addCase(createProductProperty.fulfilled, (state) => {
+        state.form.status = 'SUCCESS'
+      })
+
+      // Create Option
+      .addCase(createProductOption.pending, (state) => {
+        state.form.status = 'LOADING'
+      })
+      .addCase(createProductOption.rejected, (state) => {
+        state.form.status = 'FAILED'
+      })
+      .addCase(createProductOption.fulfilled, (state) => {
+        state.form.status = 'SUCCESS'
+      })
+
+      // Update Option
+      .addCase(updateProductOption.pending, (state) => {
+        state.form.status = 'LOADING'
+      })
+      .addCase(updateProductOption.rejected, (state) => {
+        state.form.status = 'FAILED'
+      })
+      .addCase(updateProductOption.fulfilled, (state) => {
+        state.form.status = 'SUCCESS'
+      })
   },
 })
 
 export const selectProduct = (state: RootState) => state.product.single
 export const selectListProduct = (state: RootState) => state.product.list
 export const selectDetailProduct = (state: RootState) => state.product.detail
+export const selectPropertiesProduct = (state: RootState) => state.product.properties
+export const selectOptionsProduct = (state: RootState) => state.product.options
 export const { updateOption, deleteOption, createOption, updateProperty, deleteProperty, createProperty, updateColor, deleteColor, createColor, createCustomerOption, updateCustomerOption, deleteCustomerOption } = productSlice.actions
 
 export default productSlice.reducer

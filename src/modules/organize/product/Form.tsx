@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   LocaleField,
   FileField,
@@ -25,6 +25,7 @@ import { getListProduct } from './redux'
 import { useNavigate } from 'react-router-dom'
 import { IImage } from 'components/shared/form/UploadField'
 import useTheme from 'hooks/useTheme'
+import ProductOptionForm from 'components/shared/form/ProductOptionForm'
 
 const statusOptions = [
   { label: 'Enabled', value: true },
@@ -46,7 +47,7 @@ const ProductForm = ({ defaultValues, id }: any) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(productSchema), defaultValues: { ...defaultValues, brand: defaultValues?.brand?._id, category: defaultValues?.category?._id } })
   const navigate = useNavigate()
-  const { device } = useWeb()
+  const { width } = useWeb()
   const { lang } = useLanguage()
   const { loadify, notify } = useNotify()
   const [loading, setLoading] = useState(false)
@@ -64,6 +65,25 @@ const ProductForm = ({ defaultValues, id }: any) => {
   const categoryId = watch('category')
   const isStockCheck = watch('isStock')
   const { theme } = useTheme()
+  const [productId, setProductId] = useState(undefined)
+
+  const [optionDialog, setOptionDialog] = useState({
+    open: false,
+    propertyId: null,
+    categoryId: null,
+    optionId: null,
+  })
+  const [propertyDialog, setPropertyDialog] = useState({
+    open: false,
+    propertyId: null,
+    categoryId: null,
+  })
+
+  const propertyFormRef: any = useRef()
+
+  useEffect(() => {
+    setProductId(id)
+  }, [id])
 
   useEffect(() => {
     setIsStock(isStockCheck)
@@ -77,6 +97,8 @@ const ProductForm = ({ defaultValues, id }: any) => {
   useEffect(() => {
     const category: any = listCategory.find((value: any) => value._id === categoryId)
     setCategory(category?._id || '')
+    setOptionDialog(prev => ({ ...prev, categoryId }))
+    setPropertyDialog(prev => ({ ...prev, categoryId }))
   }, [categoryId, listCategory])
 
   useEffect(() => {
@@ -180,15 +202,25 @@ const ProductForm = ({ defaultValues, id }: any) => {
   }
 
   const submit = async (data) => {
+    let body = data
+    if (!id) {
+      const categoryData = propertyFormRef.current?.getProperties()
+      const properties = categoryData
+      body = {
+        ...body,
+        properties,
+      }
+    }
+
     Axios({
       method: id ? 'PUT' : 'POST',
       url: id ? `/organize/product/update/${id}` : `/organize/product/create`,
-      body: data,
+      body,
     })
-      .then((data) => {
-        notify(data?.data?.msg, 'success')
+      .then((resp) => {
+        notify(resp?.data?.msg, 'success')
         dispatch(getListProduct({}))
-        !id && navigate(`/organize/product/create/property/${data?.data?.data?._id}`)
+        setProductId(resp?.data?.data?._id)
       })
       .catch((err) => {
         if (!err?.response?.data?.msg) {
@@ -207,8 +239,7 @@ const ProductForm = ({ defaultValues, id }: any) => {
       onSubmit={handleSubmit(submit)}
       style={{
         display: 'grid',
-        gridTemplateColumns:
-          device === 'mobile' || device === 'tablet' ? '1fr' : '1fr',
+        gridTemplateColumns: width > 1024 ? '600px 1fr' : '1fr',
         gridGap: 20,
       }}
     >
@@ -251,7 +282,7 @@ const ProductForm = ({ defaultValues, id }: any) => {
             {...register('brand')}
           />
         </div>
-        <div style={{ gridArea: 'product', marginTop: 20, marginBottom: 20 }}>
+        <div style={{ gridArea: 'product' }}>
           <LocaleField
             onChange={handleChangeProduct}
             err={errors?.name}
@@ -344,7 +375,15 @@ const ProductForm = ({ defaultValues, id }: any) => {
           </Button>
         </div>
       </div>
-      <div style={{ display: 'grid' }}></div>
+      <ProductOptionForm
+        ref={propertyFormRef}
+        categoryId={categoryId}
+        productId={productId}
+        optionDialog={optionDialog}
+        propertyDialog={propertyDialog}
+        setOptionDialog={setOptionDialog}
+        setPropertyDialog={setPropertyDialog}
+      />
     </form>
   )
 }

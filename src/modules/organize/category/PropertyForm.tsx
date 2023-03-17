@@ -12,6 +12,7 @@ import { createCategoryProperty, selectFormCategory, updateCategoryProperty } fr
 import useNotify from 'hooks/useNotify'
 import useLanguage from 'hooks/useLanguage'
 import Button from 'components/shared/Button'
+import { createProductProperty, updateProductProperty } from '../product/redux'
 
 export const choiceOptions: IOptions[] = [
   {
@@ -36,6 +37,7 @@ export const requireOptions: IOptions[] = [
 ]
 
 export const PropertyForm = ({
+  productId,
   dialog,
   setDialog,
   defaultValues,
@@ -92,6 +94,35 @@ export const PropertyForm = ({
 
   const submit = (data) => {
     if (!dialog.categoryId) return notify(language['ERROR:NO_CATEGORY'], 'error')
+    if (productId) {
+      dialog.propertyId
+      ? dispatch(
+          updateProductProperty({
+            id: dialog.propertyId,
+            body: { ...data, product: productId },
+          })
+        )
+          .unwrap()
+          .then((response) => {
+            if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
+            onUpdate()
+            notify(language[response?.msg], 'success')
+          })
+          .catch(err => notify(err?.response?.msg, 'error'))
+      : dispatch(
+          createProductProperty({
+            body: { ...data, product: productId },
+          })
+        )
+          .unwrap()
+          .then((response) => {
+            if (response.code !== 'SUCCESS') return notify(language[response?.msg], 'error')
+            onUpdate()
+            notify(language[response?.msg], 'success')
+          })
+          .catch(err => notify(err?.response?.msg, 'error'))
+      return
+    }
     dialog.propertyId
       ? dispatch(
           updateCategoryProperty({

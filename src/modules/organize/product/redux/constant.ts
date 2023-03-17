@@ -132,6 +132,9 @@ export interface ProductState {
   list: IBody<Object[]>
   detail: IBody<IProductBody>
   single: IBody<any>
+  properties: IBody<any>
+  options: IBody<any>
+  form: Omit<IBody<any>, 'data'>
 }
 
 export const initialState: ProductState = {
@@ -149,4 +152,15 @@ export const initialState: ProductState = {
     data: initState,
     status: 'INIT',
   },
+  properties: {
+    data: [],
+    status: 'INIT',
+  },
+  options: {
+    data: [],
+    status: 'INIT',
+  },
+  form: {
+    status: 'INIT',
+  }
 }
