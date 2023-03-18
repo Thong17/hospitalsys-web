@@ -104,7 +104,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
       style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr',
-        gridColumnGap: 20,
+        gridColumnGap: 40,
         gridTemplateAreas:
           device === 'mobile'
             ? ` 

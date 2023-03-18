@@ -89,7 +89,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
     <div style={{
       display: 'grid',
       gridTemplateColumns: '1fr 1fr 1fr',
-      gridColumnGap: 20,
+      gridColumnGap: 40,
       gridTemplateAreas:
         device === 'mobile'
           ? ` 
@@ -115,7 +115,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
             `
           }}
         >
-          <div style={{ gridArea: 'name', marginTop: 20 }}>
+          <div style={{ gridArea: 'name' }}>
             <LocaleField
               onChange={handleChangeRole}
               err={errors?.name}
@@ -124,7 +124,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
               defaultValue={getValues('name')}
             />
           </div>
-          <div style={{ gridArea: 'description', marginTop: 20 }}>
+          <div style={{ gridArea: 'description' }}>
             <DetailField
               type='text'
               label='Description'
