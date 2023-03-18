@@ -26,7 +26,6 @@ export const MenuDialog = forwardRef(
       <>
         {label && (
           <IconButton
-            aria-haspopup='true'
             aria-controls='menu-dialog'
             onClick={(event) => setAnchorEl(event.currentTarget)}
             {...props}
