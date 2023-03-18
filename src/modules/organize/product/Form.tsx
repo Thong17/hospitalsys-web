@@ -240,7 +240,7 @@ const ProductForm = ({ defaultValues, id }: any) => {
       style={{
         display: 'grid',
         gridTemplateColumns: width > 1024 ? '600px 1fr' : '1fr',
-        gridGap: 20,
+        gridGap: 40,
       }}
     >
       <div
