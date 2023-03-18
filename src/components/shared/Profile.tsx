@@ -54,6 +54,7 @@ const Profile: FC<IProfile> = ({ id, username, picture, sidebar }) => {
         </CustomProfile>
       )}
       <Menu
+        disableScrollLock={true}
         open={Boolean(anchorEl)}
         onClose={() => setAnchorEl(null)}
         anchorEl={anchorEl}

@@ -26,7 +26,8 @@ export const MenuDialog = forwardRef(
       <>
         {label && (
           <IconButton
-            aria-controls='menu'
+            aria-haspopup='true'
+            aria-controls='menu-dialog'
             onClick={(event) => setAnchorEl(event.currentTarget)}
             {...props}
           >
@@ -34,10 +35,11 @@ export const MenuDialog = forwardRef(
           </IconButton>
         )}
         <CustomMenu
+          disableScrollLock={true}
           open={Boolean(anchorEl)}
           onClose={handleClose}
           anchorEl={anchorEl}
-          id='menu'
+          id='menu-dialog'
           styled={theme}
           style={{ maxHeight: 500 }}
           anchorOrigin={anchorOrigin}

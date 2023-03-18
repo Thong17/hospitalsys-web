@@ -77,6 +77,7 @@ const Input: ForwardRefRenderFunction<
         IconComponent={ArrowDropDownRoundedIcon}
         onClose={() => setSearchText('')}
         MenuProps={{
+          disableScrollLock: true,
           autoFocus: false,
           sx: {
             '& .MuiPaper-root': {

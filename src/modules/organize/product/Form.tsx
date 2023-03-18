@@ -65,7 +65,7 @@ const ProductForm = ({ defaultValues, id }: any) => {
   const categoryId = watch('category')
   const isStockCheck = watch('isStock')
   const { theme } = useTheme()
-  const [productId, setProductId] = useState(undefined)
+  const [productId, setProductId] = useState(id)
 
   const [optionDialog, setOptionDialog] = useState({
     open: false,

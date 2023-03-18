@@ -97,7 +97,7 @@ const ProductOptionForm = forwardRef(({
     if (productId) return getProductDetail(productId)
     getCategoryDetail(categoryId)
     // eslint-disable-next-line
-  }, [categoryId, productId])
+  }, [productId, categoryId])
 
   const handleDropProperty = (event: any) => {
     if (!event.destination || event.destination?.index === event.source?.index || !productId)
@@ -184,7 +184,7 @@ const ProductOptionForm = forwardRef(({
       })
       .catch(() => null)
   }
-
+  
   return (
     <div>
       <Button
