@@ -8,7 +8,7 @@ export const Section = ({ children, describe, boxShadow, err, ...props }: any) =
         style={{
           padding: 20,
           border: err ? `1px solid ${theme.color.error}77` : theme.border.quaternary,
-          borderRadius: theme.radius.ternary,
+          borderRadius: theme.radius.secondary,
           position: 'relative',
           boxShadow: boxShadow || ''
         }}
