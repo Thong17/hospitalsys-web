@@ -16,6 +16,12 @@ import Loading from 'components/shared/Loading'
 import useTheme from 'hooks/useTheme'
 import { useNavigate } from 'react-router-dom'
 
+const segmentOption = [
+  { label: 'General', value: 'GENERAL' },
+  { label: 'Doctor', value: 'DOCTOR' },
+  { label: 'Patient', value: 'PATIENT' },
+]
+
 export const RoleForm = ({ defaultValues, id }: any) => {
   const dispatch = useAppDispatch()
   const { data: listRole, status: statusListRole } = useAppSelector(selectListRole)
@@ -35,10 +41,17 @@ export const RoleForm = ({ defaultValues, id }: any) => {
   const [role, setRole] = useState('')
   const [permission, setPermission] = useState<any>({ label: '', privilege: {}, navigation: {} })
   const [roleOption, setRoleOption] = useState<IOptions[]>([])
+  const [segment, setSegment] = useState(defaultValues?.segment || 'GENERAL')
   const roleId = watch('role')
+  const segmentValue = watch('segment')
 
   const [preRole, setPreRole] = useState({})
   const [preMenu, setPreMenu] = useState({})
+
+  useEffect(() => {
+    const selectedSegment = segmentOption.find((key) => key.value === segmentValue)
+    setSegment(selectedSegment?.value || 'GENERAL')
+  }, [segmentValue])
 
   useEffect(() => {
     let isSubscribed = true
@@ -128,13 +141,13 @@ export const RoleForm = ({ defaultValues, id }: any) => {
               device === 'mobile'
                 ? ` 
                   'username username role' 
-                  'password password password'
+                  'segment password password'
                   'email email email'
                   'action action action'
                 `
                 : ` 
                   'username username role' 
-                  'password password password'
+                  'segment password password'
                   'email email email'
                   'action action action'
                 `,
@@ -157,6 +170,15 @@ export const RoleForm = ({ defaultValues, id }: any) => {
               err={errors.role?.message}
               loading={statusListRole === 'LOADING' ? true : false}
               {...register('role')}
+            />
+          </div>
+          <div style={{ gridArea: 'segment' }}>
+            <SelectField
+              value={segment}
+              label='Segment'
+              options={segmentOption}
+              err={errors.segment?.message}
+              {...register('segment')}
             />
           </div>
           <div style={{ gridArea: 'password' }}>

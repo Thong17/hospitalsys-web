@@ -13,7 +13,7 @@ export const UpdateUser = () => {
   
   useEffect(() => {
     if (id) {
-      dispatch(getUser({ id, query: {}, fields: ['username', 'email', 'role'] }))
+      dispatch(getUser({ id, query: {}, fields: ['username', 'email', 'role', 'segment'] }))
     }
   }, [dispatch, id])
 
