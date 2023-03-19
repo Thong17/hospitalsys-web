@@ -155,15 +155,6 @@ const StoreBreadcrumbs: FC<IBreadcrumbs<page>> = ({ page, id }) => {
     ],
   }
   let stage = stages[page]
-  if (id) {
-    stage = [
-      ...stage,
-      {
-        title: language['SETUP'],
-        path: `/organize/product/update/property/${id}`
-      }
-    ]
-  }
   return <Breadcrumb stages={stage} title={<StorefrontRoundedIcon />} />
 }
 
