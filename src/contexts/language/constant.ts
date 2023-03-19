@@ -220,7 +220,7 @@ export const languages = {
     TOTAL_PENALTY: 'Total\u00a0Penalty',
     DEPOSIT_LOAN: 'Deposit\u00a0Balance',
     GRAND_TOTAL: 'Grand\u00a0Total',
-    // MODULE: Category
+    // TODO: Category
     PROPERTY_FORM: 'Property\u00a0Form',
     OPTION_FORM: 'Option\u00a0Form',
     PROPERTY: 'Property',
@@ -472,7 +472,7 @@ export const languages = {
     TOTAL_PENALTY: 'ពិន័យសរុប',
     DEPOSIT_LOAN: 'ដាក់ប្រាក់ដើម',
     GRAND_TOTAL: 'តម្លៃ​សរុប',
-    // MODULE: Category
+    // TODO: Category
     PROPERTY_FORM: 'Property\u00a0Form',
     OPTION_FORM: 'Option\u00a0Form',
     PROPERTY: 'Property',

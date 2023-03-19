@@ -84,6 +84,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
         notify(data?.data?.msg, 'success')
         if (!id) {
           reset(defaultValues)
+          navigate(`/admin/user/create/info/${data?.data?.data?._id}`)
         }
       })
       .catch((err) => notify(err.response?.data?.[0]?.path || err.response?.data?.msg, 'error'))

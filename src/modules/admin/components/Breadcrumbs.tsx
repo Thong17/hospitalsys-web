@@ -8,9 +8,10 @@ declare type page = 'admin' | 'role' | 'roleCreate' | 'roleUpdate' | 'user' | 'u
 interface IAdminBreadcrumbs {
   page: page
   title?: string
+  userId?: string
 }
 
-const AdminBreadcrumbs: FC<IAdminBreadcrumbs> = ({ page }) => {
+const AdminBreadcrumbs: FC<IAdminBreadcrumbs> = ({ page, userId }) => {
   const { language } = useLanguage()
   const stages = {
     admin: [
@@ -87,6 +88,10 @@ const AdminBreadcrumbs: FC<IAdminBreadcrumbs> = ({ page }) => {
       {
         title: language['UPDATE'],
       },
+      {
+        title: language['DETAIL'],
+        path: `/admin/user/update/info/${userId}`
+      }
     ],
   }
   return <Breadcrumb stages={stages[page]} title={<AdminPanelSettingsIcon />} />

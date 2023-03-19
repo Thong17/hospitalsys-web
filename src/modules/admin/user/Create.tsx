@@ -7,7 +7,7 @@ export const CreateUser = () => {
   const Header = () => {
     return (
       <>
-        <AdminBreadcrumbs page='userCreate' title='Table' />
+        <AdminBreadcrumbs page='userCreate' />
       </>
     )
   }

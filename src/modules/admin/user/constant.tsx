@@ -23,7 +23,7 @@ export const initState: IUserBody = {
   password: '',
   email: '',
   role: '',
-  segment: 'General'
+  segment: 'GENERAL'
 }
 
 export const importColumns = [

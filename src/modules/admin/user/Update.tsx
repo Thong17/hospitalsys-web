@@ -20,7 +20,7 @@ export const UpdateUser = () => {
   const Header = () => {
     return (
       <>
-        <AdminBreadcrumbs page='userUpdate' title='Table' />
+        <AdminBreadcrumbs page='userUpdate' userId={id} />
       </>
     )
   }

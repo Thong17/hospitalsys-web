@@ -39,6 +39,7 @@ import { UserProfile } from 'modules/auth/UserProfile'
 import { UserChangePassword } from 'modules/auth/UserChangePassword'
 import { HintButton } from 'components/shared/HintButton'
 import { PaymentStore } from 'modules/organize/store/Payment'
+import { UserInfo } from 'modules/admin/user/UserInfo'
 
 const routes: RouteObject[] = [
   {
@@ -103,6 +104,14 @@ const routes: RouteObject[] = [
         element: (
           <AuthGuard role={{ route: 'user', action: 'detail' }}>
             <DetailUser />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: 'user/:action/info/:id',
+        element: (
+          <AuthGuard role={{ route: 'user', action: 'detail' }}>
+            <UserInfo />
           </AuthGuard>
         ),
       },
