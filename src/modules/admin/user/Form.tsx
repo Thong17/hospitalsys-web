@@ -130,7 +130,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
                               `,
       }}
     >
-      <div style={{ gridArea: 'form', }}>
+      <div style={{ gridArea: 'form', position: 'sticky', top: 20, height: '430px' }}>
         <div
           style={{
             position: 'relative',

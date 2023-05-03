@@ -100,7 +100,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
           'form privilege privilege'
         `,
     }}>
-      <div style={{ gridArea: 'form' }}>
+      <div style={{ gridArea: 'form', position: 'sticky', top: 20, height: '430px' }}>
         <form
           onSubmit={handleSubmit(submit)}
           style={{
