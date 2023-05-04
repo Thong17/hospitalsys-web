@@ -1,7 +1,7 @@
 import AdminBreadcrumbs from '../components/Breadcrumbs'
 import Container from 'components/shared/Container'
 import { initState } from './constant'
-import { RoleForm } from './Form'
+import { UserForm } from './Form'
 
 export const CreateUser = () => {
   const Header = () => {
@@ -14,7 +14,7 @@ export const CreateUser = () => {
 
   return (
     <Container header={<Header />}>
-      <RoleForm defaultValues={initState} />
+      <UserForm defaultValues={initState} />
     </Container>
   )
 }

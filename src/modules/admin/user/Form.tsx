@@ -22,7 +22,7 @@ const segmentOption = [
   { label: 'Patient', value: 'PATIENT' },
 ]
 
-export const RoleForm = ({ defaultValues, id }: any) => {
+export const UserForm = ({ defaultValues, id }: any) => {
   const dispatch = useAppDispatch()
   const { data: listRole, status: statusListRole } = useAppSelector(selectListRole)
   const {
@@ -47,7 +47,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
 
   const [preRole, setPreRole] = useState({})
   const [preMenu, setPreMenu] = useState({})
-
+  
   useEffect(() => {
     const selectedSegment = segmentOption.find((key) => key.value === segmentValue)
     setSegment(selectedSegment?.value || 'GENERAL')
@@ -221,7 +221,7 @@ export const RoleForm = ({ defaultValues, id }: any) => {
           </div>
         </div>
       </div>
-      <div style={{ gridArea: 'privilege' }}>
+      <div style={{ gridArea: 'privilege', position: 'relative' }}>
         {!loading ? <PrivilegeField label={`${permission.label} Privilege Preview`} preRole={preRole} preMenu={preMenu} menu={permission.navigation} role={permission.privilege} isReadOnly={true} /> : <Loading />}
       </div>
     </form>
