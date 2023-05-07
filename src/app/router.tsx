@@ -40,6 +40,7 @@ import { UserChangePassword } from 'modules/auth/UserChangePassword'
 import { HintButton } from 'components/shared/HintButton'
 import { PaymentStore } from 'modules/organize/store/Payment'
 import { UserInfo } from 'modules/admin/user/UserInfo'
+import { Cashing, Reservation, ReservationForm, Sale, Stock, Stocks } from 'modules/sale'
 
 const routes: RouteObject[] = [
   {
@@ -147,6 +148,50 @@ const routes: RouteObject[] = [
             <DetailRole />
           </AuthGuard>
         ),
+      },
+    ],
+  },
+  {
+    path: '/sale',
+    element: (
+      <AuthGuard role={{ route: 'menu', action: 'operation' }}>
+        <Sale />
+      </AuthGuard>
+    ),
+    children: [
+      // Stock
+      {
+        path: 'stock',
+        element: <>
+          <Stocks />
+          <HintButton playlistId='PLHX_VLeC9D-6dfu3mnwiaK5iq9KnN4vhg' />
+        </>,
+      },
+      {
+        path: 'stock/item/:id',
+        element: <Stock />,
+      },
+
+      // Cashing
+      {
+        path: 'cashing',
+        element: <>
+          <Cashing />        
+          <HintButton playlistId='PLHX_VLeC9D-68Mw8MY1B7w9R_jdN5LJ4C' />
+        </>
+      },
+
+      // Reservation
+      {
+        path: 'reservation',
+        element: <>
+          <Reservation />      
+          <HintButton playlistId='PLHX_VLeC9D-68Mw8MY1B7w9R_jdN5LJ4C' />
+        </>
+      },
+      {
+        path: 'reservation/:id',
+        element: <ReservationForm />,
       },
     ],
   },
