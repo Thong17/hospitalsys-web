@@ -19,3 +19,8 @@ export const invoiceColumns: ITableColumn<string>[] = [
   { id: 'disc', label: 'Disc' },
   { id: 'total', label: 'Total' },
 ]
+
+export const genderOptions = [
+  { label: 'Male', value: 'male' },
+  { label: 'Female', value: 'female' },
+]

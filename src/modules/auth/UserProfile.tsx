@@ -13,6 +13,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate, useParams } from 'react-router-dom'
 import { updateProfileSchema } from './schema'
 import { FileField, IImage } from 'components/shared/form/UploadField'
+import { genderOptions } from 'constants/variables'
 
 const mappedProfile = (data) => {
   return {
@@ -25,11 +26,6 @@ const mappedProfile = (data) => {
     address: data?.profile?.address,
   }
 }
-
-const listGender = [
-  { label: 'Male', value: 'male' },
-  { label: 'Female', value: 'female' },
-]
 
 export const UserProfile = () => {
   const { id } = useParams()
@@ -51,7 +47,7 @@ export const UserProfile = () => {
   const [photoPath, setPhotoPath] = useState<IImage | undefined>(undefined)
 
   useEffect(() => {
-    const gender = listGender.find((gender) => gender.value === genderId)
+    const gender = genderOptions.find((gender) => gender.value === genderId)
     setGender(gender?.value || '')
   }, [genderId])
 
@@ -156,7 +152,7 @@ export const UserProfile = () => {
             <SelectField
               value={gender}
               label='Gender'
-              options={listGender}
+              options={genderOptions}
               err={errors.gender?.message}
               {...register('gender')}
             />
