@@ -144,7 +144,7 @@ export const DrawerForm = ({ dialog, setDialog }: any) => {
   const { language } = useLanguage()
   const [cashObj, setCashObj] = useState(initCash)
   const [listCash, setListCash] = useState<any[]>(
-    user?.drawer?.cashes.map((cash) => ({ ...cash, origin: true })) || []
+    user?.drawer?.cashes?.map((cash) => ({ ...cash, origin: true })) || []
   )
   const [cashForm, setCashForm] = useState(false)
   const [templateInput, setTemplateInput] = useState('')

@@ -30,7 +30,7 @@ const mappedEvent = (data): ICalendarEvent[] => {
       end: reservation.endAt,
       structures: reservation.structures,
       reservationId: reservation._id,
-      name: reservation.customer?.displayName,
+      name: reservation.customer?.displayName || 'General',
     })
   })
   return mappedData
